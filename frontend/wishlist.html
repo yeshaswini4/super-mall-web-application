@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wishlist - SuperMall</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/main.css">
+    <style>
+        .wishlist-container { max-width: 1200px; margin: 100px auto 40px; padding: 20px; }
+        .wishlist-item { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 15px; display: flex; align-items: center; gap: 20px; }
+        .wishlist-item img { width: 100px; height: 100px; object-fit: cover; border-radius: 8px; }
+        .wishlist-item-info { flex: 1; }
+        .wishlist-item h3 { margin: 0 0 5px; font-size: 1.2rem; }
+        .wishlist-item .price { font-size: 1.5rem; font-weight: 700; color: #667eea; }
+        .btn-remove { background: #f56565; color: white; padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; margin: 5px; }
+        .btn-add-cart { background: #48bb78; color: white; padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; margin: 5px; }
+        .empty-wishlist { text-align: center; padding: 60px 20px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-left"><span class="logo-text">🛒 SuperMall</span></div>
+        <div class="nav-right">
+            <a href="index.html">Home</a>
+            <a href="shop_list.html">Shops</a>
+            <a href="offers.html">Offers</a>
+            <a href="compare.html">Compare</a>
+            <a href="wishlist.html" style="position:relative;">❤️ Wishlist <span id="wishlistBadge" style="position:absolute;top:-5px;right:-10px;background:#e53e3e;color:white;border-radius:50%;width:20px;height:20px;font-size:12px;display:none;align-items:center;justify-content:center;">0</span></a>
+            <a href="cart.html" style="position:relative;">🛒 Cart <span id="cartBadge" style="position:absolute;top:-5px;right:-10px;background:#e53e3e;color:white;border-radius:50%;width:20px;height:20px;font-size:12px;display:none;align-items:center;justify-content:center;">0</span></a>
+            <div id="userMenu" style="position:relative;display:none;">
+                <button id="profileBtn" style="background:#667eea;color:white;border:none;padding:10px 20px;border-radius:6px;cursor:pointer;font-weight:600;"></button>
+            </div>
+            <a href="login.html" id="loginBtn" class="btn-primary">Login</a>
+        </div>
+    </nav>
+
+    <div class="wishlist-container">
+        <h1>❤️ My Wishlist</h1>
+        <div id="wishlistItems"></div>
+    </div>
+
+    <footer class="footer"><p>© 2025 SuperMall</p></footer>
+
+    <script src="static/js/config.js"></script>
+    <script src="static/js/auth.js"></script>
+    <script src="static/js/cart.js"></script>
+    <script src="static/js/wishlist.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = authService.getCurrentUser();
+            if (user) {
+                document.getElementById('loginBtn').style.display = 'none';
+                document.getElementById('userMenu').style.display = 'block';
+                document.getElementById('profileBtn').textContent = user.name;
+            }
+            
+            displayWishlist();
+        });
+
+        function displayWishlist() {
+            const wishlist = wishlistManager.getWishlist();
+            const wishlistItems = document.getElementById('wishlistItems');
+
+            if (wishlist.length === 0) {
+                wishlistItems.innerHTML = `
+                    <div class="empty-wishlist">
+                        <h2>Your wishlist is empty</h2>
+                        <p>Add some products to your wishlist</p>
+                        <a href="shop_list.html" class="btn-primary">Browse Shops</a>
+                    </div>
+                `;
+                return;
+            }
+
+            wishlistItems.innerHTML = wishlist.map(item => `
+                <div class="wishlist-item">
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="wishlist-item-info">
+                        <h3>${item.name}</h3>
+                        <p style="color: #718096;">${item.shopName || 'SuperMall'}</p>
+                        <div class="price">₹${Math.round(item.price * 83)}</div>
+                    </div>
+                    <div>
+                        <button class="btn-add-cart" onclick="moveToCart(${item.id})">Add to Cart</button>
+                        <button class="btn-remove" onclick="removeFromWishlist(${item.id})">Remove</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function removeFromWishlist(id) {
+            wishlistManager.removeFromWishlist(id);
+            displayWishlist();
+        }
+
+        function moveToCart(id) {
+            const item = wishlistManager.getWishlist().find(item => item.id === id);
+            if (item) {
+                cartManager.addToCart(item);
+                wishlistManager.removeFromWishlist(id);
+                displayWishlist();
+            }
+        }
+    </script>
+</body>
+</html>

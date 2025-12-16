@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Shops - Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/main.css">
+    <link rel="stylesheet" href="static/css/components.css">
+    <style>
+        .container { max-width: 1400px; margin: 100px auto 40px; padding: 20px; }
+        .shop-table { width: 100%; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .shop-table th, .shop-table td { padding: 15px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+        .shop-table th { background: #f5576c; color: white; }
+        .status-pending { background: #fbbf24; color: white; padding: 5px 10px; border-radius: 20px; font-size: 0.85rem; }
+        .status-approved { background: #48bb78; color: white; padding: 5px 10px; border-radius: 20px; font-size: 0.85rem; }
+        .btn-approve { background: #48bb78; color: white; padding: 8px 15px; border: none; border-radius: 6px; cursor: pointer; margin-right: 5px; }
+        .btn-reject { background: #f56565; color: white; padding: 8px 15px; border: none; border-radius: 6px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-left"><span class="logo-text">🛒 SuperMall Admin</span></div>
+        <div class="nav-right">
+            <a href="admin_dashboard.html">Dashboard</a>
+            <a href="admin_shops.html">Shops</a>
+            <a href="admin_categories.html">Categories</a>
+            <a href="admin_floors.html">Floors</a>
+            <a href="#" onclick="logout()" class="btn-primary">Logout</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>🏪 Shop Approvals</h1>
+        <p>Review and approve merchant shops</p>
+
+        <table class="shop-table" style="margin-top: 30px;">
+            <thead>
+                <tr>
+                    <th>Shop Name</th>
+                    <th>Merchant</th>
+                    <th>Category</th>
+                    <th>Floor</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>New Electronics Store</td>
+                    <td>John Doe</td>
+                    <td>Electronics</td>
+                    <td>2nd Floor</td>
+                    <td><span class="status-pending">Pending</span></td>
+                    <td>
+                        <button class="btn-approve" onclick="approve(1)">Approve</button>
+                        <button class="btn-reject" onclick="reject(1)">Reject</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Tech World Electronics</td>
+                    <td>Jane Smith</td>
+                    <td>Electronics</td>
+                    <td>2nd Floor</td>
+                    <td><span class="status-approved">Approved</span></td>
+                    <td>-</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <footer class="footer"><p>© 2025 SuperMall</p></footer>
+
+    <script src="static/js/config.js"></script>
+    <script src="static/js/auth.js"></script>
+    <script>
+        function approve(id) {
+            if (confirm('Approve this shop?')) {
+                alert('Shop approved successfully!');
+                location.reload();
+            }
+        }
+
+        function reject(id) {
+            if (confirm('Reject this shop?')) {
+                alert('Shop rejected!');
+                location.reload();
+            }
+        }
+
+        function logout() {
+            authService.logout();
+        }
+    </script>
+</body>
+</html>

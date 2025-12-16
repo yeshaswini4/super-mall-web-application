@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Floor Directory - SuperMall</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/main.css">
+    <link rel="stylesheet" href="static/css/components.css">
+    <style>
+        .floors-container { max-width: 1400px; margin: 100px auto 40px; padding: 20px; }
+        .floor-card { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 12px; padding: 30px; margin: 20px 0; cursor: pointer; transition: transform 0.3s; }
+        .floor-card:hover { transform: translateY(-5px); }
+        .floor-shops { display: none; margin-top: 20px; padding: 20px; background: white; border-radius: 8px; color: #333; }
+        .floor-shops.active { display: block; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-left"><span class="logo-text">🛒 SuperMall</span></div>
+        <div class="nav-right">
+            <a href="index.html">Home</a>
+            <a href="shop_list.html">Shops</a>
+            <a href="offers.html">Offers</a>
+            <a href="compare.html">Compare</a>
+            <a href="login.html" class="btn-primary">Login</a>
+        </div>
+    </nav>
+
+    <div class="floors-container">
+        <h1>🏬 Floor Directory</h1>
+        <p>Navigate through different floors</p>
+
+        <div class="floor-card" onclick="toggleFloor('ground')">
+            <h2>Ground Floor</h2>
+            <p>Grocery, Daily Essentials</p>
+            <div id="ground" class="floor-shops">
+                <h3>Shops on Ground Floor:</h3>
+                <p>• Fresh Mart Grocery</p>
+                <p>• Daily Needs Store</p>
+            </div>
+        </div>
+
+        <div class="floor-card" onclick="toggleFloor('first')">
+            <h2>1st Floor</h2>
+            <p>Fashion, Clothing, Footwear</p>
+            <div id="first" class="floor-shops">
+                <h3>Shops on 1st Floor:</h3>
+                <p>• Royal Fashion Store</p>
+                <p>• Max Fashion</p>
+                <p>• Bata Footwear</p>
+            </div>
+        </div>
+
+        <div class="floor-card" onclick="toggleFloor('second')">
+            <h2>2nd Floor</h2>
+            <p>Electronics, Beauty</p>
+            <div id="second" class="floor-shops">
+                <h3>Shops on 2nd Floor:</h3>
+                <p>• Tech World Electronics</p>
+                <p>• Croma</p>
+                <p>• Health & Glow</p>
+            </div>
+        </div>
+
+        <div class="floor-card" onclick="toggleFloor('third')">
+            <h2>3rd Floor</h2>
+            <p>Home & Kitchen, Toys</p>
+            <div id="third" class="floor-shops">
+                <h3>Shops on 3rd Floor:</h3>
+                <p>• Home Centre</p>
+                <p>• Toy Planet</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer"><p>© 2025 SuperMall</p></footer>
+
+    <script>
+        function toggleFloor(id) {
+            const floor = document.getElementById(id);
+            floor.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fresh Mart Grocery - SuperMall</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/main.css">
+    <link rel="stylesheet" href="static/css/components.css">
+    <link rel="stylesheet" href="static/css/mobile.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-left">
+            <span class="logo-text">🛒 SuperMall</span>
+        </div>
+        <div class="nav-right">
+            <a href="index.html">Home</a>
+            <a href="shop_list.html">Shops</a>
+            <a href="offers.html">Offers</a>
+            <a href="compare.html">Compare</a>
+            <a href="wishlist.html" style="position:relative;">❤️ Wishlist <span id="wishlistBadge" style="position:absolute;top:-5px;right:-10px;background:#e53e3e;color:white;border-radius:50%;width:20px;height:20px;font-size:12px;display:none;align-items:center;justify-content:center;">0</span></a>
+            <a href="cart.html" style="position:relative;">🛒 Cart <span id="cartBadge" style="position:absolute;top:-5px;right:-10px;background:#e53e3e;color:white;border-radius:50%;width:20px;height:20px;font-size:12px;display:none;align-items:center;justify-content:center;">0</span></a>
+            <div id="userMenu" style="position:relative;display:none;">
+                <button id="profileBtn" style="background:#667eea;color:white;border:none;padding:10px 20px;border-radius:6px;cursor:pointer;font-weight:600;"></button>
+                <div id="profileDropdown" style="display:none;position:absolute;right:0;top:45px;background:white;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.15);min-width:200px;z-index:1000;">
+                    <div style="padding:15px;border-bottom:1px solid #e2e8f0;">
+                        <div style="font-weight:600;color:#2d3748;" id="userName"></div>
+                        <div style="font-size:12px;color:#718096;margin-top:5px;" id="userEmail"></div>
+                        <div style="font-size:12px;color:#667eea;margin-top:5px;font-weight:600;" id="userRole"></div>
+                    </div>
+                    <a href="customer_dashboard.html" id="dashboardLink" style="display:block;padding:12px 15px;color:#2d3748;text-decoration:none;">📋 Dashboard</a>
+                    <a href="#" onclick="handleLogout()" style="display:block;padding:12px 15px;color:#e53e3e;text-decoration:none;border-top:1px solid #e2e8f0;">🚪 Logout</a>
+                </div>
+            </div>
+            <a href="login.html" id="loginBtn" class="btn-primary">Login</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="shop-header">
+            <div class="shop-info">
+                <h1>🥬 Fresh Mart Grocery</h1>
+                <p>Organic vegetables, fruits & daily needs delivered fresh to your doorstep</p>
+                <div class="shop-stats">
+                    <span>⭐ 4.9 Rating</span>
+                    <span>📦 500+ Products</span>
+                    <span>🚚 Same Day Delivery</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="products-grid">
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1610832958506-aa56368176cf?w=300" alt="Fresh Apples">
+                <h3>Fresh Red Apples</h3>
+                <p class="price">₹180/kg <span class="original-price">₹220/kg</span></p>
+                <div class="product-actions">
+                    <button onclick="addToCart('fresh-apples', 'Fresh Red Apples', 180, 'https://images.unsplash.com/photo-1610832958506-aa56368176cf?w=300')" class="btn-primary">Add to Cart</button>
+                    <button onclick="addToWishlist('fresh-apples', 'Fresh Red Apples', 180, 'https://images.unsplash.com/photo-1610832958506-aa56368176cf?w=300')" class="btn-wishlist">❤️</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?w=300" alt="Bananas">
+                <h3>Organic Bananas</h3>
+                <p class="price">₹60/dozen <span class="original-price">₹80/dozen</span></p>
+                <div class="product-actions">
+                    <button onclick="addToCart('organic-bananas', 'Organic Bananas', 60, 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=300')" class="btn-primary">Add to Cart</button>
+                    <button onclick="addToWishlist('organic-bananas', 'Organic Bananas', 60, 'https://images.unsplash.com/photo-1540420773420-3366772f4999?w=300')" class="btn-wishlist">❤️</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1550258987-190a2d41a8ba?w=300" alt="Vegetables">
+                <h3>Mixed Vegetables</h3>
+                <p class="price">₹120/kg <span class="original-price">₹150/kg</span></p>
+                <div class="product-actions">
+                    <button onclick="addToCart('mixed-vegetables', 'Mixed Vegetables', 120, 'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?w=300')" class="btn-primary">Add to Cart</button>
+                    <button onclick="addToWishlist('mixed-vegetables', 'Mixed Vegetables', 120, 'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?w=300')" class="btn-wishlist">❤️</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1563636619-e9143da7973b?w=300" alt="Milk">
+                <h3>Fresh Milk 1L</h3>
+                <p class="price">₹65 <span class="original-price">₹75</span></p>
+                <div class="product-actions">
+                    <button onclick="addToCart('fresh-milk', 'Fresh Milk 1L', 65, 'https://images.unsplash.com/photo-1563636619-e9143da7973b?w=300')" class="btn-primary">Add to Cart</button>
+                    <button onclick="addToWishlist('fresh-milk', 'Fresh Milk 1L', 65, 'https://images.unsplash.com/photo-1563636619-e9143da7973b?w=300')" class="btn-wishlist">❤️</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300" alt="Bread">
+                <h3>Whole Wheat Bread</h3>
+                <p class="price">₹45 <span class="original-price">₹55</span></p>
+                <div class="product-actions">
+                    <button onclick="addToCart('wheat-bread', 'Whole Wheat Bread', 45, 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300')" class="btn-primary">Add to Cart</button>
+                    <button onclick="addToWishlist('wheat-bread', 'Whole Wheat Bread', 45, 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300')" class="btn-wishlist">❤️</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1544737151-6e4b9d1c6d4f?w=300" alt="Rice">
+                <h3>Basmati Rice 5kg</h3>
+                <p class="price">₹450 <span class="original-price">₹520</span></p>
+                <div class="product-actions">
+                    <button onclick="addToCart('basmati-rice', 'Basmati Rice 5kg', 450, 'https://images.unsplash.com/photo-1544737151-6e4b9d1c6d4f?w=300')" class="btn-primary">Add to Cart</button>
+                    <button onclick="addToWishlist('basmati-rice', 'Basmati Rice 5kg', 450, 'https://images.unsplash.com/photo-1544737151-6e4b9d1c6d4f?w=300')" class="btn-wishlist">❤️</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="static/js/auth.js"></script>
+    <script src="static/js/api.js"></script>
+    <script src="static/js/cart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAuthUI();
+            updateCartBadge();
+            updateWishlistBadge();
+        });
+    </script>
+</body>
+</html>

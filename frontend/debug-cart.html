@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Cart - SuperMall</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/main.css">
+    <style>
+        .debug-container { max-width: 800px; margin: 100px auto; padding: 20px; }
+        .debug-section { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin: 20px 0; }
+        .btn-debug { background: #667eea; color: white; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; margin: 5px; }
+        .debug-output { background: #f7fafc; padding: 15px; border-radius: 8px; margin: 10px 0; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-left"><span class="logo-text">🛒 SuperMall Debug</span></div>
+        <div class="nav-right">
+            <a href="index.html">Home</a>
+            <a href="cart.html" style="position:relative;">🛒 Cart <span id="cartBadge" style="position:absolute;top:-5px;right:-10px;background:#e53e3e;color:white;border-radius:50%;width:20px;height:20px;font-size:12px;display:none;align-items:center;justify-content:center;">0</span></a>
+            <div id="userMenu" style="position:relative;display:none;">
+                <button id="profileBtn" style="background:#667eea;color:white;border:none;padding:10px 20px;border-radius:6px;cursor:pointer;font-weight:600;"></button>
+            </div>
+            <a href="login.html" id="loginBtn" class="btn-primary">Login</a>
+        </div>
+    </nav>
+
+    <div class="debug-container">
+        <h1>🔧 Cart Debug Tool</h1>
+        
+        <div class="debug-section">
+            <h3>Authentication Status</h3>
+            <div id="authStatus"></div>
+            <button class="btn-debug" onclick="simulateLogin()">Simulate Login</button>
+            <button class="btn-debug" onclick="logout()">Logout</button>
+        </div>
+
+        <div class="debug-section">
+            <h3>Cart Operations</h3>
+            <button class="btn-debug" onclick="addTestProduct()">Add Test Product</button>
+            <button class="btn-debug" onclick="showCart()">Show Cart Contents</button>
+            <button class="btn-debug" onclick="clearCart()">Clear Cart</button>
+            <div id="cartOutput" class="debug-output"></div>
+        </div>
+
+        <div class="debug-section">
+            <h3>Local Storage Debug</h3>
+            <button class="btn-debug" onclick="showLocalStorage()">Show Local Storage</button>
+            <button class="btn-debug" onclick="clearLocalStorage()">Clear All Storage</button>
+            <div id="storageOutput" class="debug-output"></div>
+        </div>
+    </div>
+
+    <script src="static/js/config.js"></script>
+    <script src="static/js/auth.js"></script>
+    <script src="static/js/cart.js"></script>
+    <script src="static/js/wishlist.js"></script>
+    <script src="static/js/product.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            updateAuthStatus();
+            showCart();
+        });
+
+        function updateAuthStatus() {
+            const user = authService.getCurrentUser();
+            const statusDiv = document.getElementById('authStatus');
+            
+            if (user) {
+                statusDiv.innerHTML = `<strong>✅ Logged in:</strong> ${user.name} (${user.role})`;
+                document.getElementById('loginBtn').style.display = 'none';
+                document.getElementById('userMenu').style.display = 'block';
+                document.getElementById('profileBtn').textContent = user.name;
+            } else {
+                statusDiv.innerHTML = '<strong>❌ Not logged in</strong>';
+            }
+        }
+
+        function simulateLogin() {
+            const user = {
+                id: Date.now(),
+                email: 'test@example.com',
+                name: 'Test User',
+                role: 'customer'
+            };
+            authService.setUser(user);
+            updateAuthStatus();
+        }
+
+        function logout() {
+            authService.logout();
+        }
+
+        function addTestProduct() {
+            const testProduct = {
+                id: 1,
+                name: 'iPhone 15 Pro',
+                price: 999,
+                category: 'electronics',
+                shopName: 'Tech World Electronics',
+                image: 'https://images.unsplash.com/photo-1592286927505-c0d0e0c5d0e0?w=400',
+                features: ['A17 Pro Chip', '256GB Storage']
+            };
+            
+            cartManager.addToCart(testProduct);
+            showCart();
+        }
+
+        function showCart() {
+            const cart = cartManager.getCart();
+            const output = document.getElementById('cartOutput');
+            
+            output.innerHTML = `
+                <strong>Cart Items:</strong> ${cart.length}<br>
+                <strong>Total Items:</strong> ${cartManager.getTotalItems()}<br>
+                <strong>Total Price:</strong> $${cartManager.getTotalPrice().toFixed(2)}<br><br>
+                <strong>Items:</strong><br>
+                ${cart.map(item => `
+                    - ${item.name} (Qty: ${item.quantity}, Price: $${item.price})
+                    ${item.originalPrice ? `[Original: $${item.originalPrice}, Discount: ${item.discount}]` : ''}
+                `).join('<br>')}
+            `;
+        }
+
+        function clearCart() {
+            cartManager.clearCart();
+            showCart();
+        }
+
+        function showLocalStorage() {
+            const output = document.getElementById('storageOutput');
+            const cart = localStorage.getItem('cart');
+            const user = localStorage.getItem('user');
+            const wishlist = localStorage.getItem('wishlist');
+            
+            output.innerHTML = `
+                <strong>Cart:</strong> ${cart || 'null'}<br><br>
+                <strong>User:</strong> ${user || 'null'}<br><br>
+                <strong>Wishlist:</strong> ${wishlist || 'null'}
+            `;
+        }
+
+        function clearLocalStorage() {
+            localStorage.clear();
+            sessionStorage.clear();
+            showLocalStorage();
+            updateAuthStatus();
+            showCart();
+        }
+    </script>
+</body>
+</html>

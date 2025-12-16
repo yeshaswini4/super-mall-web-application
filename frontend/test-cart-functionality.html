@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Cart Functionality - SuperMall</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/main.css">
+    <style>
+        .test-container { max-width: 800px; margin: 100px auto; padding: 20px; }
+        .test-product { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin: 20px 0; }
+        .btn-test { background: #48bb78; color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; margin: 10px; }
+        .status { padding: 15px; border-radius: 8px; margin: 10px 0; }
+        .status.success { background: #c6f6d5; color: #22543d; }
+        .status.info { background: #bee3f8; color: #2a4365; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-left"><span class="logo-text">🛒 SuperMall</span></div>
+        <div class="nav-right">
+            <a href="index.html">Home</a>
+            <a href="cart.html" style="position:relative;">🛒 Cart <span id="cartBadge" style="position:absolute;top:-5px;right:-10px;background:#e53e3e;color:white;border-radius:50%;width:20px;height:20px;font-size:12px;display:none;align-items:center;justify-content:center;">0</span></a>
+            <div id="userMenu" style="position:relative;display:none;">
+                <button id="profileBtn" style="background:#667eea;color:white;border:none;padding:10px 20px;border-radius:6px;cursor:pointer;font-weight:600;"></button>
+            </div>
+            <a href="login.html" id="loginBtn" class="btn-primary">Login</a>
+        </div>
+    </nav>
+
+    <div class="test-container">
+        <h1>🧪 Cart Functionality Test</h1>
+        
+        <div class="status info">
+            <strong>Test Instructions:</strong><br>
+            1. Try adding products to cart without logging in - should redirect to login<br>
+            2. Login and see discounted prices applied<br>
+            3. Check cart to see discount information
+        </div>
+
+        <div id="authStatus" class="status"></div>
+
+        <div class="test-product">
+            <h3>📱 iPhone 15 Pro (Electronics)</h3>
+            <p>Shop: Tech World Electronics</p>
+            <p>Original Price: $999 | With 70% OFF: $299.70</p>
+            <button class="btn-test" onclick="testAddToCart(1)">Add to Cart</button>
+        </div>
+
+        <div class="test-product">
+            <h3>👟 Nike Air Max (Fashion)</h3>
+            <p>Shop: Royal Fashion Store</p>
+            <p>Original Price: $120 | With 55% OFF: $54</p>
+            <button class="btn-test" onclick="testAddToCart(6)">Add to Cart</button>
+        </div>
+
+        <div class="test-product">
+            <h3>🍎 Organic Apples (Grocery)</h3>
+            <p>Shop: Fresh Mart</p>
+            <p>Original Price: $5 | With 30% OFF: $3.50</p>
+            <button class="btn-test" onclick="testAddToCart(4)">Add to Cart</button>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <button class="btn-test" onclick="checkCartContents()" style="background: #667eea;">Check Cart Contents</button>
+            <button class="btn-test" onclick="clearTestCart()" style="background: #f56565;">Clear Cart</button>
+        </div>
+
+        <div id="cartContents" style="margin-top: 20px;"></div>
+    </div>
+
+    <script src="static/js/config.js"></script>
+    <script src="static/js/auth.js"></script>
+    <script src="static/js/cart.js"></script>
+    <script src="static/js/product.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = authService.getCurrentUser();
+            if (user) {
+                document.getElementById('loginBtn').style.display = 'none';
+                document.getElementById('userMenu').style.display = 'block';
+                document.getElementById('profileBtn').textContent = user.name;
+            }
+            
+            updateAuthStatus();
+        });
+
+        function updateAuthStatus() {
+            const user = authService.getCurrentUser();
+            const statusDiv = document.getElementById('authStatus');
+            
+            if (user) {
+                statusDiv.className = 'status success';
+                statusDiv.innerHTML = `<strong>✅ Logged in as:</strong> ${user.name} (${user.role})`;
+                document.getElementById('loginBtn').style.display = 'none';
+                document.getElementById('userMenu').style.display = 'block';
+                document.getElementById('profileBtn').textContent = user.name;
+            } else {
+                statusDiv.className = 'status info';
+                statusDiv.innerHTML = '<strong>ℹ️ Not logged in</strong> - Add to cart will redirect to login page';
+            }
+        }
+
+        function testAddToCart(productId) {
+            const product = productManager.getProduct(productId);
+            if (product) {
+                let shopName, category;
+                if (productId === 1) {
+                    shopName = 'Tech World Electronics';
+                    category = 'electronics';
+                } else if (productId === 6) {
+                    shopName = 'Royal Fashion Store';
+                    category = 'fashion';
+                } else if (productId === 4) {
+                    shopName = 'Fresh Mart';
+                    category = 'grocery';
+                }
+                
+                cartManager.addToCart({...product, shopName, category});
+                setTimeout(updateAuthStatus, 100);
+            }
+        }
+
+        function checkCartContents() {
+            const cart = cartManager.getCart();
+            const contentsDiv = document.getElementById('cartContents');
+            
+            if (cart.length === 0) {
+                contentsDiv.innerHTML = '<div class="status info">Cart is empty</div>';
+                return;
+            }
+
+            contentsDiv.innerHTML = `
+                <div class="status success">
+                    <strong>Cart Contents (${cart.length} items):</strong><br>
+                    ${cart.map(item => `
+                        • ${item.name} - ${item.shopName}<br>
+                        &nbsp;&nbsp;${item.originalPrice ? `Original: $${item.originalPrice} | Discounted: $${item.price.toFixed(2)} (${item.discount} OFF)` : `Price: $${item.price}`}<br>
+                        &nbsp;&nbsp;Quantity: ${item.quantity}
+                    `).join('<br>')}
+                </div>
+            `;
+        }
+
+        function clearTestCart() {
+            cartManager.clearCart();
+            document.getElementById('cartContents').innerHTML = '';
+        }
+    </script>
+</body>
+</html>

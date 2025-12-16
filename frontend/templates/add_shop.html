@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="page-section">
+    <h2 class="section-title">🏪 Add New Shop</h2>
+    <p style="text-align: center; color: #718096; font-size: 1.1rem; margin-top: -20px; margin-bottom: 20px;">Create your shop and start selling</p>
+
+    <div class="form-card">
+        <form id="addShopForm" onsubmit="return false;">
+            <div class="input-group">
+                <label>Shop Name</label>
+                <input type="text" id="shopName" placeholder="e.g. Royal Fashion" required>
+            </div>
+
+            <div class="input-group">
+                <label>Category</label>
+                <select id="shopCategory">
+                    <option value="fashion">Fashion & Clothing</option>
+                    <option value="electronics">Electronics</option>
+                    <option value="grocery">Grocery</option>
+                    <option value="home">Home Essentials</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Floor</label>
+                <select id="shopFloor">
+                    <option value="1">Floor 1</option>
+                    <option value="2">Floor 2</option>
+                    <option value="3">Floor 3</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Location (Address)</label>
+                <input type="text" id="shopLocation" placeholder="Village / Town / City">
+            </div>
+
+            <div class="input-group">
+                <label>Short Description</label>
+                <textarea id="shopDescription" rows="4" placeholder="What does this shop sell?"></textarea>
+            </div>
+
+            <div class="input-group">
+                <label>Image (optional)</label>
+                <input type="file" id="shopImage" accept="image/*">
+            </div>
+
+            <button class="btn-primary full-btn" onclick="createShop()">✨ Create Shop</button>
+        </form>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px;">
+        <a href="/merchant-dashboard" class="btn-secondary">← Back to Dashboard</a>
+    </div>
+</div>
+
+<!-- shops.js provides createShop() -->
+<script src="{% static 'js/shops.js' %}"></script>
+{% endblock %}

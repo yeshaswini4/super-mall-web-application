@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="dashboard">
+
+    <aside class="sidebar">
+        <h3>💼 Merchant Panel</h3>
+        <a href="/add-shop">➕ Add Shop</a>
+        <a href="/add-product">📦 Add Product</a>
+        <a href="/orders">📝 Orders</a>
+        <a href="/">🏠 Back to Home</a>
+    </aside>
+
+    <main class="dashboard-content">
+        <h2>Welcome, Merchant 👋</h2>
+        <p>Manage your shop and products with ease</p>
+        
+        <div class="dashboard-cards">
+            <div class="dashboard-card">
+                <h3>My Shops</h3>
+                <div class="stat">3</div>
+            </div>
+            <div class="dashboard-card">
+                <h3>Total Products</h3>
+                <div class="stat">42</div>
+            </div>
+            <div class="dashboard-card">
+                <h3>Pending Orders</h3>
+                <div class="stat">7</div>
+            </div>
+        </div>
+    </main>
+
+</div>
+
+{% endblock %}

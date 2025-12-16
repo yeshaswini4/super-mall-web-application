@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bata Footwear - SuperMall</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/main.css">
+    <style>
+        .shop-header { background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%); color: white; padding: 60px 20px; text-align: center; margin-top: 70px; }
+        .products-section { max-width: 1400px; margin: 40px auto; padding: 20px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; margin-top: 30px; }
+        .product-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.3s; }
+        .product-card:hover { transform: translateY(-5px); }
+        .product-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; }
+        .product-card h3 { font-size: 1.1rem; margin-bottom: 10px; }
+        .product-price { font-size: 1.5rem; font-weight: 700; color: #e53e3e; margin: 10px 0; }
+        .btn-cart { background: #48bb78; color: white; padding: 10px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; margin: 5px 0; }
+        .btn-wishlist { background: #f56565; color: white; padding: 10px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; margin: 5px 0; }
+        .product-buttons { display: flex; gap: 10px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-left"><span class="logo-text">🛒 SuperMall</span></div>
+        <div class="nav-right">
+            <a href="index.html">Home</a>
+            <a href="shop_list.html">Shops</a>
+            <a href="wishlist.html" style="position:relative;">❤️ Wishlist <span id="wishlistBadge" style="position:absolute;top:-5px;right:-10px;background:#e53e3e;color:white;border-radius:50%;width:20px;height:20px;font-size:12px;display:none;align-items:center;justify-content:center;">0</span></a>
+            <a href="cart.html" style="position:relative;">🛒 Cart <span id="cartBadge" style="position:absolute;top:-5px;right:-10px;background:#e53e3e;color:white;border-radius:50%;width:20px;height:20px;font-size:12px;display:none;align-items:center;justify-content:center;">0</span></a>
+            <div id="userMenu" style="position:relative;display:none;">
+                <button id="profileBtn" style="background:#667eea;color:white;border:none;padding:10px 20px;border-radius:6px;cursor:pointer;font-weight:600;"></button>
+            </div>
+            <a href="login.html" id="loginBtn" class="btn-primary">Login</a>
+        </div>
+    </nav>
+
+    <div class="shop-header">
+        <h1>👞 Bata Footwear</h1>
+        <p>Shoes, Sandals, Sports Shoes</p>
+        <p style="margin-top: 10px; opacity: 0.9;">Floor 1 | Fashion</p>
+    </div>
+
+    <div class="products-section">
+        <h2>Our Products</h2>
+        <div class="product-grid">
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400" alt="Formal Shoes">
+                <h3>Formal Leather Shoes</h3>
+                <div class="product-price">₹3,299</div>
+                <p style="color: #666; font-size: 0.9rem;">Premium leather collection</p>
+                <div class="product-buttons">
+                    <button class="btn-cart" onclick="addToCart('Formal Leather Shoes', 3299)" style="flex:1;">🛒 Cart</button>
+                    <button class="btn-wishlist" onclick="addToWishlist('Formal Leather Shoes', 3299)" style="flex:1;">❤️ Wish</button>
+                </div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400" alt="Sneakers">
+                <h3>Sports Sneakers</h3>
+                <div class="product-price">₹2,799</div>
+                <p style="color: #666; font-size: 0.9rem;">Comfortable sports shoes</p>
+                <div class="product-buttons">
+                    <button class="btn-cart" onclick="addToCart('Sports Sneakers', 2799)" style="flex:1;">🛒 Cart</button>
+                    <button class="btn-wishlist" onclick="addToWishlist('Sports Sneakers', 2799)" style="flex:1;">❤️ Wish</button>
+                </div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400" alt="Sandals">
+                <h3>Casual Sandals</h3>
+                <div class="product-price">₹1,599</div>
+                <p style="color: #666; font-size: 0.9rem;">Summer collection</p>
+                <div class="product-buttons">
+                    <button class="btn-cart" onclick="addToCart('Casual Sandals', 1599)" style="flex:1;">🛒 Cart</button>
+                    <button class="btn-wishlist" onclick="addToWishlist('Casual Sandals', 1599)" style="flex:1;">❤️ Wish</button>
+                </div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=400" alt="Boots">
+                <h3>Ankle Boots</h3>
+                <div class="product-price">₹4,199</div>
+                <p style="color: #666; font-size: 0.9rem;">Winter collection</p>
+                <div class="product-buttons">
+                    <button class="btn-cart" onclick="addToCart('Ankle Boots', 4199)" style="flex:1;">🛒 Cart</button>
+                    <button class="btn-wishlist" onclick="addToWishlist('Ankle Boots', 4199)" style="flex:1;">❤️ Wish</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer"><p>© 2025 SuperMall</p></footer>
+
+    <script src="static/js/config.js"></script>
+    <script src="static/js/auth.js"></script>
+    <script src="static/js/cart.js"></script>
+    <script src="static/js/wishlist.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = authService.getCurrentUser();
+            if (user) {
+                document.getElementById('loginBtn').style.display = 'none';
+                document.getElementById('userMenu').style.display = 'block';
+                document.getElementById('profileBtn').textContent = user.name;
+            }
+        });
+
+        function addToCart(name, price) {
+            const product = {
+                id: Date.now(),
+                name: name,
+                price: price / 83,
+                shopName: 'Bata Footwear',
+                category: 'fashion',
+                image: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400'
+            };
+            cartManager.addToCart(product);
+        }
+
+        function addToWishlist(name, price) {
+            const product = {
+                id: Date.now() + Math.random(),
+                name: name,
+                price: price / 83,
+                shopName: 'Bata Footwear',
+                category: 'fashion',
+                image: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400'
+            };
+            wishlistManager.addToWishlist(product);
+        }
+    </script>
+</body>
+</html>

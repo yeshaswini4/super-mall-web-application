@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div style="padding: 40px 5%; background: white;">
+    <h2 class="page-title">Explore All Shops</h2>
+    <p style="text-align: center; color: #718096; font-size: 1.1rem; margin-top: -20px;">Find the perfect store for your needs</p>
+    
+    <!-- Filters -->
+    <div class="filters">
+        <select id="categoryFilter" onchange="filterShops()">
+            <option value="all">🏪 All Categories</option>
+            <option value="electronics">📱 Electronics</option>
+            <option value="fashion">👗 Fashion</option>
+            <option value="grocery">🍎 Grocery</option>
+            <option value="home">🏠 Home Essentials</option>
+        </select>
+
+        <select id="floorFilter" onchange="filterShops()">
+            <option value="all">🏬 All Floors</option>
+            <option value="1">Floor 1</option>
+            <option value="2">Floor 2</option>
+            <option value="3">Floor 3</option>
+        </select>
+    </div>
+</div>
+
+<!-- Shop Grid -->
+<div class="shop-grid" id="shopGrid">
+    <!-- JS will load shops dynamically -->
+</div>
+
+<script src="{% static 'js/shops.js' %}"></script>
+
+{% endblock %}

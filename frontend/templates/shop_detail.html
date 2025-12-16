@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="shop-header">
+    <img src="{% static 'images/placeholder-shop.jpg' %}" class="shop-banner">
+    <h2 id="shopName" data-shop-id="{{ shop.id|default:1 }}">Shop Name Here</h2>
+    <p id="shopDescription">Discover amazing products and great deals</p>
+</div>
+
+<div style="padding: 60px 5%;">
+    <h3 style="font-size: 2rem; margin-bottom: 30px; color: #1a202c;">🛍️ Available Products</h3>
+    <div class="product-grid" id="productGrid">
+        <!-- JS will load products dynamically -->
+    </div>
+</div>
+
+<script src="{% static 'js/products.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function(){
+        const shopName = document.getElementById('shopName');
+        const shopId = shopName ? parseInt(shopName.dataset.shopId || '1') : 1;
+        if (window.loadProductsForShop) window.loadProductsForShop(shopId);
+    });
+</script>
+{% endblock %}

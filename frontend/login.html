@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - SuperMall</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/main.css">
+    <style>
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .login-container { background: white; padding: 50px 40px; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); max-width: 450px; width: 90%; }
+        .login-container h1 { text-align: center; margin-bottom: 10px; color: #1a202c; }
+        .login-container p { text-align: center; color: #718096; margin-bottom: 30px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: #2d3748; }
+        .form-group input, .form-group select { width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1rem; font-family: 'Poppins', sans-serif; transition: all 0.3s; box-sizing: border-box; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,0.1); }
+        .form-group select { appearance: none; background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="%23666" d="M2 0L0 2h4zm0 5L0 3h4z"/></svg>'); background-repeat: no-repeat; background-position: right 12px center; background-size: 12px; cursor: pointer; }
+        .btn-login { width: 100%; padding: 14px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.3s; margin-top: 10px; }
+        .btn-login:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102,126,234,0.4); }
+        .signup-link { text-align: center; margin-top: 20px; color: #718096; }
+        .signup-link a { color: #667eea; font-weight: 600; text-decoration: none; }
+        .back-home { text-align: center; margin-top: 15px; }
+        .back-home a { color: #667eea; text-decoration: none; font-weight: 500; }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h1>🛒 SuperMall Login</h1>
+        <p>Access your dashboard</p>
+
+        <form id="loginForm" onsubmit="handleLogin(event)">
+
+
+            <div class="form-group">
+                <label>Select Role</label>
+                <select id="userRole" required>
+                    <option value="">-- Choose Role --</option>
+                    <option value="customer">Customer</option>
+                    <option value="merchant">Merchant</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Username or Email</label>
+                <input type="text" id="email" placeholder="Enter username or email" required>
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <div style="position:relative;">
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                    <button type="button" onclick="togglePassword('password')" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:18px;">👁️</button>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-login">Login</button>
+        </form>
+
+        <div class="signup-link">
+            Don't have an account? <a href="signup.html" id="signupLink">Sign Up</a>
+        </div>
+
+        <div class="back-home">
+            <a href="index.html">← Back to Home</a>
+        </div>
+    </div>
+
+    <script src="static/js/api.js"></script>
+    <script src="static/js/auth.js"></script>
+    <script src="static/js/cart.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirect = urlParams.get('redirect');
+        const role = urlParams.get('role');
+        
+        if (redirect) {
+            document.getElementById('signupLink').href = 'signup.html?redirect=' + encodeURIComponent(redirect);
+        }
+        
+        if (role) {
+            document.getElementById('userRole').value = role;
+        }
+        
+        function togglePassword(fieldId) {
+            const field = document.getElementById(fieldId);
+            const button = field.nextElementSibling;
+            if (field.type === 'password') {
+                field.type = 'text';
+                button.textContent = '🙈';
+            } else {
+                field.type = 'password';
+                button.textContent = '👁️';
+            }
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const result = await authService.login(email, password);
+                
+                if (result.success) {
+                    // Handle pending cart item
+                    if (typeof cartManager !== 'undefined') {
+                        cartManager.handlePendingCartItem();
+                    }
+
+                    if (redirect === 'cart') {
+                        window.location.href = 'cart.html';
+                    } else if (redirect === 'shop_list.html') {
+                        window.location.href = 'shop_list.html';
+                    } else if (redirect) {
+                        window.location.href = redirect;
+                    } else if (result.user.role === 'admin') {
+                        window.location.href = 'admin_dashboard.html';
+                    } else if (result.user.role === 'merchant') {
+                        window.location.href = 'merchant_dashboard.html';
+                    } else {
+                        window.location.href = 'customer_dashboard.html';
+                    }
+                } else {
+                    alert('Login failed: ' + result.message);
+                }
+            } catch (error) {
+                alert('Login error: Please check your credentials');
+            }
+        }
+    </script>
+</body>
+</html>

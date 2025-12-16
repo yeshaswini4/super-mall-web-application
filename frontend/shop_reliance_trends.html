@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reliance Trends - SuperMall</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/main.css">
+    <style>
+        .shop-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 60px 20px; text-align: center; margin-top: 70px; }
+        .products-section { max-width: 1400px; margin: 40px auto; padding: 20px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; margin-top: 30px; }
+        .product-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.3s; }
+        .product-card:hover { transform: translateY(-5px); }
+        .product-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; }
+        .product-card h3 { font-size: 1.1rem; margin-bottom: 10px; }
+        .product-price { font-size: 1.5rem; font-weight: 700; color: #667eea; margin: 10px 0; }
+        .btn-cart { background: #48bb78; color: white; padding: 10px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; margin: 5px 0; }
+        .btn-wishlist { background: #f56565; color: white; padding: 10px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; margin: 5px 0; }
+        .product-buttons { display: flex; gap: 10px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-left"><span class="logo-text">🛒 SuperMall</span></div>
+        <div class="nav-right">
+            <a href="index.html">Home</a>
+            <a href="shop_list.html">Shops</a>
+            <a href="wishlist.html" style="position:relative;">❤️ Wishlist <span id="wishlistBadge" style="position:absolute;top:-5px;right:-10px;background:#e53e3e;color:white;border-radius:50%;width:20px;height:20px;font-size:12px;display:none;align-items:center;justify-content:center;">0</span></a>
+            <a href="cart.html" style="position:relative;">🛒 Cart <span id="cartBadge" style="position:absolute;top:-5px;right:-10px;background:#e53e3e;color:white;border-radius:50%;width:20px;height:20px;font-size:12px;display:none;align-items:center;justify-content:center;">0</span></a>
+            <div id="userMenu" style="position:relative;display:none;">
+                <button id="profileBtn" style="background:#667eea;color:white;border:none;padding:10px 20px;border-radius:6px;cursor:pointer;font-weight:600;"></button>
+            </div>
+            <a href="login.html" id="loginBtn" class="btn-primary">Login</a>
+        </div>
+    </nav>
+
+    <div class="shop-header">
+        <h1>👗 Reliance Trends</h1>
+        <p>Ethnic & Western Wear</p>
+        <p style="margin-top: 10px; opacity: 0.9;">Floor 1 | Fashion</p>
+    </div>
+
+    <div class="products-section">
+        <h2>Our Products</h2>
+        <div class="product-grid">
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400" alt="Kurti">
+                <h3>Designer Kurti</h3>
+                <div class="product-price">₹1,899</div>
+                <p style="color: #666; font-size: 0.9rem;">Ethnic wear collection</p>
+                <div class="product-buttons">
+                    <button class="btn-cart" onclick="addToCart('Designer Kurti', 1899)" style="flex:1;">🛒 Cart</button>
+                    <button class="btn-wishlist" onclick="addToWishlist('Designer Kurti', 1899)" style="flex:1;">❤️ Wish</button>
+                </div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400" alt="Saree">
+                <h3>Silk Saree</h3>
+                <div class="product-price">₹4,299</div>
+                <p style="color: #666; font-size: 0.9rem;">Premium silk collection</p>
+                <div class="product-buttons">
+                    <button class="btn-cart" onclick="addToCart('Silk Saree', 4299)" style="flex:1;">🛒 Cart</button>
+                    <button class="btn-wishlist" onclick="addToWishlist('Silk Saree', 4299)" style="flex:1;">❤️ Wish</button>
+                </div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1506629905607-d405b7a30db9?w=400" alt="Lehenga">
+                <h3>Party Lehenga</h3>
+                <div class="product-price">₹6,799</div>
+                <p style="color: #666; font-size: 0.9rem;">Designer party wear</p>
+                <div class="product-buttons">
+                    <button class="btn-cart" onclick="addToCart('Party Lehenga', 6799)" style="flex:1;">🛒 Cart</button>
+                    <button class="btn-wishlist" onclick="addToWishlist('Party Lehenga', 6799)" style="flex:1;">❤️ Wish</button>
+                </div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=400" alt="Palazzo">
+                <h3>Palazzo Set</h3>
+                <div class="product-price">₹2,199</div>
+                <p style="color: #666; font-size: 0.9rem;">Comfortable ethnic wear</p>
+                <div class="product-buttons">
+                    <button class="btn-cart" onclick="addToCart('Palazzo Set', 2199)" style="flex:1;">🛒 Cart</button>
+                    <button class="btn-wishlist" onclick="addToWishlist('Palazzo Set', 2199)" style="flex:1;">❤️ Wish</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer"><p>© 2025 SuperMall</p></footer>
+
+    <script src="static/js/config.js"></script>
+    <script src="static/js/auth.js"></script>
+    <script src="static/js/cart.js"></script>
+    <script src="static/js/wishlist.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = authService.getCurrentUser();
+            if (user) {
+                document.getElementById('loginBtn').style.display = 'none';
+                document.getElementById('userMenu').style.display = 'block';
+                document.getElementById('profileBtn').textContent = user.name;
+            }
+        });
+
+        function addToCart(name, price) {
+            const product = {
+                id: Date.now(),
+                name: name,
+                price: price / 83,
+                shopName: 'Reliance Trends',
+                category: 'fashion',
+                image: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400'
+            };
+            cartManager.addToCart(product);
+        }
+
+        function addToWishlist(name, price) {
+            const product = {
+                id: Date.now() + Math.random(),
+                name: name,
+                price: price / 83,
+                shopName: 'Reliance Trends',
+                category: 'fashion',
+                image: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=400'
+            };
+            wishlistManager.addToWishlist(product);
+        }
+    </script>
+</body>
+</html>

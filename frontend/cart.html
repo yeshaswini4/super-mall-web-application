@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - SuperMall</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/main.css">
+    <style>
+        .cart-container { max-width: 1200px; margin: 100px auto 40px; padding: 20px; }
+        .cart-item { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 15px; display: flex; align-items: center; gap: 20px; }
+        .cart-item img { width: 100px; height: 100px; object-fit: cover; border-radius: 8px; }
+        .cart-item-info { flex: 1; }
+        .cart-item h3 { margin: 0 0 5px; font-size: 1.2rem; }
+        .cart-item .price { font-size: 1.5rem; font-weight: 700; color: #667eea; }
+        .quantity-controls { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
+        .quantity-btn { background: #667eea; color: white; border: none; width: 30px; height: 30px; border-radius: 6px; cursor: pointer; }
+        .quantity-input { width: 60px; text-align: center; padding: 5px; border: 1px solid #e2e8f0; border-radius: 6px; }
+        .btn-remove { background: #f56565; color: white; padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; }
+        .cart-summary { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-top: 20px; }
+        .total-price { font-size: 2rem; font-weight: 700; color: #667eea; margin: 15px 0; }
+        .btn-checkout { background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); color: white; padding: 15px 40px; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 700; cursor: pointer; width: 100%; }
+        .empty-cart { text-align: center; padding: 60px 20px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-left"><span class="logo-text">🛒 SuperMall</span></div>
+        <div class="nav-right">
+            <a href="index.html">Home</a>
+            <a href="shop_list.html">Shops</a>
+            <a href="offers.html">Offers</a>
+            <a href="compare.html">Compare</a>
+            <a href="cart.html" style="position:relative;">🛒 Cart <span id="cartBadge" style="position:absolute;top:-5px;right:-10px;background:#e53e3e;color:white;border-radius:50%;width:20px;height:20px;font-size:12px;display:none;align-items:center;justify-content:center;">0</span></a>
+            <div id="userMenu" style="position:relative;display:none;">
+                <button id="profileBtn" style="background:#667eea;color:white;border:none;padding:10px 20px;border-radius:6px;cursor:pointer;font-weight:600;"></button>
+            </div>
+            <a href="login.html" id="loginBtn" class="btn-primary">Login</a>
+        </div>
+    </nav>
+
+    <div class="cart-container">
+        <h1>🛒 Shopping Cart</h1>
+        <div id="cartItems"></div>
+        <div id="cartSummary" class="cart-summary" style="display:none;">
+            <h3>Order Summary</h3>
+            <div style="display: flex; justify-content: space-between; margin: 10px 0;">
+                <span>Total Items:</span>
+                <span id="totalItems">0</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin: 10px 0;">
+                <span>Total Price:</span>
+                <span class="total-price" id="totalPrice">$0</span>
+            </div>
+            <button class="btn-checkout" onclick="checkout()">Proceed to Checkout</button>
+            <button class="btn-remove" onclick="clearCart()" style="width: 100%; margin-top: 10px;">Clear Cart</button>
+        </div>
+    </div>
+
+    <footer class="footer"><p>© 2025 SuperMall</p></footer>
+
+    <script src="static/js/config.js"></script>
+    <script src="static/js/auth.js"></script>
+    <script src="static/js/cart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = authService.getCurrentUser();
+            if (user) {
+                document.getElementById('loginBtn').style.display = 'none';
+                document.getElementById('userMenu').style.display = 'block';
+                document.getElementById('profileBtn').textContent = user.name;
+            }
+            
+            displayCart();
+        });
+
+        function displayCart() {
+            const cart = cartManager.getCart();
+            const cartItems = document.getElementById('cartItems');
+            const cartSummary = document.getElementById('cartSummary');
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = `
+                    <div class="empty-cart">
+                        <h2>Your cart is empty</h2>
+                        <p>Add some products to get started</p>
+                        <a href="shop_list.html" class="btn-primary">Browse Shops</a>
+                    </div>
+                `;
+                cartSummary.style.display = 'none';
+                return;
+            }
+
+            cartItems.innerHTML = cart.map(item => {
+                const hasDiscount = item.originalPrice;
+                const originalPrice = Math.round((item.originalPrice || item.price) * 83);
+                const currentPrice = Math.round(item.price * 83);
+                
+                return `
+                <div class="cart-item" style="${hasDiscount ? 'border-left:4px solid #48bb78;' : ''}">
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="cart-item-info">
+                        <h3>${item.name}</h3>
+                        <p style="color: #718096;">${item.shopName || 'SuperMall'}</p>
+                        ${hasDiscount ? `<div style="background:#48bb78;color:white;padding:3px 8px;border-radius:12px;font-size:11px;display:inline-block;margin:5px 0;">🎉 ${item.discount} OFF Applied</div>` : ''}
+                        <div class="price">
+                            ${hasDiscount ? `<span style="text-decoration:line-through;color:#999;font-size:1rem;margin-right:10px;">₹${originalPrice}</span>` : ''}
+                            ₹${currentPrice}
+                            ${hasDiscount ? `<span style="color:#48bb78;font-size:0.9rem;margin-left:10px;">You save ₹${originalPrice - currentPrice}</span>` : ''}
+                        </div>
+                        ${hasDiscount ? `<p style="color:#48bb78;font-size:0.8rem;margin:5px 0;">${item.offerTitle}</p>` : ''}
+                        <div class="quantity-controls">
+                            <button class="quantity-btn" onclick="updateQuantity(${item.id}, ${item.quantity - 1})">-</button>
+                            <input type="number" class="quantity-input" value="${item.quantity}" onchange="updateQuantity(${item.id}, this.value)" min="1">
+                            <button class="quantity-btn" onclick="updateQuantity(${item.id}, ${item.quantity + 1})">+</button>
+                        </div>
+                    </div>
+                    <button class="btn-remove" onclick="removeItem(${item.id})">Remove</button>
+                </div>
+            `}).join('');
+
+            document.getElementById('totalItems').textContent = cartManager.getTotalItems();
+            document.getElementById('totalPrice').textContent = '₹' + Math.round(cartManager.getTotalPrice() * 83);
+            cartSummary.style.display = 'block';
+        }
+
+        function updateQuantity(id, quantity) {
+            cartManager.updateQuantity(id, parseInt(quantity));
+            displayCart();
+        }
+
+        function removeItem(id) {
+            cartManager.removeFromCart(id);
+            displayCart();
+        }
+
+        function clearCart() {
+            if (confirm('Clear all items from cart?')) {
+                cartManager.clearCart();
+                displayCart();
+            }
+        }
+
+        function checkout() {
+            alert('Checkout functionality coming soon!');
+        }
+    </script>
+</body>
+</html>

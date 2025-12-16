@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="dashboard">
+
+    <aside class="sidebar">
+        <h3>🔑 Admin Panel</h3>
+        <a href="/manage-categories">🏷️ Manage Categories</a>
+        <a href="/manage-floors">🏬 Manage Floors</a>
+        <a href="/manage-shops">🏪 All Shops</a>
+        <a href="/">🏠 Back to Home</a>
+    </aside>
+
+    <main class="dashboard-content">
+        <h2>Welcome, Admin 👋</h2>
+        <p>Manage the entire SuperMall system from here</p>
+        
+        <div class="dashboard-cards">
+            <div class="dashboard-card">
+                <h3>Total Shops</h3>
+                <div class="stat">24</div>
+            </div>
+            <div class="dashboard-card">
+                <h3>Total Products</h3>
+                <div class="stat">156</div>
+            </div>
+            <div class="dashboard-card">
+                <h3>Active Users</h3>
+                <div class="stat">89</div>
+            </div>
+        </div>
+    </main>
+
+</div>
+
+{% endblock %}

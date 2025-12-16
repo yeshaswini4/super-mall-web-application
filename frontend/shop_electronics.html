@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech World Electronics - SuperMall</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/main.css">
+    <link rel="stylesheet" href="static/css/components.css">
+    <link rel="stylesheet" href="static/css/mobile.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-left">
+            <span class="logo-text">🛒 SuperMall</span>
+        </div>
+        <div class="nav-right">
+            <a href="index.html">Home</a>
+            <a href="shop_list.html">Shops</a>
+            <a href="offers.html">Offers</a>
+            <a href="compare.html">Compare</a>
+            <a href="wishlist.html" style="position:relative;">❤️ Wishlist <span id="wishlistBadge" style="position:absolute;top:-5px;right:-10px;background:#e53e3e;color:white;border-radius:50%;width:20px;height:20px;font-size:12px;display:none;align-items:center;justify-content:center;">0</span></a>
+            <a href="cart.html" style="position:relative;">🛒 Cart <span id="cartBadge" style="position:absolute;top:-5px;right:-10px;background:#e53e3e;color:white;border-radius:50%;width:20px;height:20px;font-size:12px;display:none;align-items:center;justify-content:center;">0</span></a>
+            <div id="userMenu" style="position:relative;display:none;">
+                <button id="profileBtn" style="background:#667eea;color:white;border:none;padding:10px 20px;border-radius:6px;cursor:pointer;font-weight:600;"></button>
+                <div id="profileDropdown" style="display:none;position:absolute;right:0;top:45px;background:white;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.15);min-width:200px;z-index:1000;">
+                    <div style="padding:15px;border-bottom:1px solid #e2e8f0;">
+                        <div style="font-weight:600;color:#2d3748;" id="userName"></div>
+                        <div style="font-size:12px;color:#718096;margin-top:5px;" id="userEmail"></div>
+                        <div style="font-size:12px;color:#667eea;margin-top:5px;font-weight:600;" id="userRole"></div>
+                    </div>
+                    <a href="customer_dashboard.html" id="dashboardLink" style="display:block;padding:12px 15px;color:#2d3748;text-decoration:none;">📋 Dashboard</a>
+                    <a href="#" onclick="handleLogout()" style="display:block;padding:12px 15px;color:#e53e3e;text-decoration:none;border-top:1px solid #e2e8f0;">🚪 Logout</a>
+                </div>
+            </div>
+            <a href="login.html" id="loginBtn" class="btn-primary">Login</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="shop-header">
+            <div class="shop-info">
+                <h1>📱 Tech World Electronics</h1>
+                <p>Latest smartphones, laptops & gadgets with cutting-edge technology</p>
+                <div class="shop-stats">
+                    <span>⭐ 4.8 Rating</span>
+                    <span>📦 1000+ Products</span>
+                    <span>🚚 Free Delivery</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="products-grid">
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=300" alt="iPhone 15">
+                <h3>iPhone 15 Pro</h3>
+                <p class="price">₹1,29,900 <span class="original-price">₹1,49,900</span></p>
+                <div class="product-actions">
+                    <button onclick="addToCart('iphone-15-pro', 'iPhone 15 Pro', 129900, 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=300')" class="btn-primary">Add to Cart</button>
+                    <button onclick="addToWishlist('iphone-15-pro', 'iPhone 15 Pro', 129900, 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=300')" class="btn-wishlist">❤️</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=300" alt="MacBook Pro">
+                <h3>MacBook Pro M3</h3>
+                <p class="price">₹1,99,900 <span class="original-price">₹2,29,900</span></p>
+                <div class="product-actions">
+                    <button onclick="addToCart('macbook-pro-m3', 'MacBook Pro M3', 199900, 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=300')" class="btn-primary">Add to Cart</button>
+                    <button onclick="addToWishlist('macbook-pro-m3', 'MacBook Pro M3', 199900, 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=300')" class="btn-wishlist">❤️</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=300" alt="Samsung Galaxy">
+                <h3>Samsung Galaxy S24</h3>
+                <p class="price">₹79,999 <span class="original-price">₹89,999</span></p>
+                <div class="product-actions">
+                    <button onclick="addToCart('samsung-s24', 'Samsung Galaxy S24', 79999, 'https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=300')" class="btn-primary">Add to Cart</button>
+                    <button onclick="addToWishlist('samsung-s24', 'Samsung Galaxy S24', 79999, 'https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=300')" class="btn-wishlist">❤️</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?w=300" alt="AirPods">
+                <h3>AirPods Pro 2</h3>
+                <p class="price">₹24,900 <span class="original-price">₹29,900</span></p>
+                <div class="product-actions">
+                    <button onclick="addToCart('airpods-pro-2', 'AirPods Pro 2', 24900, 'https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?w=300')" class="btn-primary">Add to Cart</button>
+                    <button onclick="addToWishlist('airpods-pro-2', 'AirPods Pro 2', 24900, 'https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?w=300')" class="btn-wishlist">❤️</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=300" alt="Dell Laptop">
+                <h3>Dell XPS 13</h3>
+                <p class="price">₹89,990 <span class="original-price">₹99,990</span></p>
+                <div class="product-actions">
+                    <button onclick="addToCart('dell-xps-13', 'Dell XPS 13', 89990, 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=300')" class="btn-primary">Add to Cart</button>
+                    <button onclick="addToWishlist('dell-xps-13', 'Dell XPS 13', 89990, 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=300')" class="btn-wishlist">❤️</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300" alt="Gaming Console">
+                <h3>PlayStation 5</h3>
+                <p class="price">₹54,990 <span class="original-price">₹59,990</span></p>
+                <div class="product-actions">
+                    <button onclick="addToCart('ps5', 'PlayStation 5', 54990, 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300')" class="btn-primary">Add to Cart</button>
+                    <button onclick="addToWishlist('ps5', 'PlayStation 5', 54990, 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300')" class="btn-wishlist">❤️</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="static/js/auth.js"></script>
+    <script src="static/js/api.js"></script>
+    <script src="static/js/cart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAuthUI();
+            updateCartBadge();
+            updateWishlistBadge();
+        });
+    </script>
+</body>
+</html>

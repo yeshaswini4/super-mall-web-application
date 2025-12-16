@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="page-section">
+    <h2 class="section-title">📦 Add Product</h2>
+    <p style="text-align: center; color: #718096; font-size: 1.1rem; margin-top: -20px; margin-bottom: 20px;">Add a new product to your shop</p>
+
+    <div class="form-card">
+        <form id="addProductForm" onsubmit="return false;">
+            <div class="input-group">
+                <label>Product Name</label>
+                <input type="text" id="productName" placeholder="e.g. SuperPhone X" required>
+            </div>
+
+            <div class="input-group">
+                <label>Price (₹)</label>
+                <input type="number" id="productPrice" placeholder="Enter price" required>
+            </div>
+
+            <div class="input-group">
+                <label>Shop (select where product belongs)</label>
+                <select id="productShop">
+                    <!-- JS fills shop options from shops[] -->
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Category</label>
+                <select id="productCategory">
+                    <option value="electronics">Electronics</option>
+                    <option value="fashion">Fashion</option>
+                    <option value="grocery">Grocery</option>
+                    <option value="home">Home</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Description</label>
+                <textarea id="productDescription" rows="3"></textarea>
+            </div>
+
+            <div class="input-group">
+                <label>Image (optional)</label>
+                <input type="file" id="productImage" accept="image/*">
+            </div>
+
+            <button class="btn-primary full-btn" onclick="createProduct()">✨ Add Product</button>
+        </form>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px;">
+        <a href="/merchant-dashboard" class="btn-secondary">← Back to Dashboard</a>
+    </div>
+</div>
+
+<script src="{% static 'js/products.js' %}"></script>
+<script src="{% static 'js/shops.js' %}"></script> <!-- shops needed to populate shop select -->
+{% endblock %}

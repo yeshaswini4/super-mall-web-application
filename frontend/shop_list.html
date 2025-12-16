@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>All Shops - SuperMall</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/main.css">
+    <link rel="stylesheet" href="static/css/components.css">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="nav-left">
+            <span class="logo-text">🛒 SuperMall</span>
+        </div>
+        <div class="nav-right">
+            <a href="index.html">Home</a>
+            <a href="shop_list.html">Shops</a>
+            <a href="compare.html">Compare</a>
+            <a href="wishlist.html" style="position:relative;">❤️ Wishlist <span id="wishlistBadge" style="position:absolute;top:-5px;right:-10px;background:#e53e3e;color:white;border-radius:50%;width:20px;height:20px;font-size:12px;display:none;align-items:center;justify-content:center;">0</span></a>
+            <a href="cart.html" style="position:relative;">🛒 Cart <span id="cartBadge" style="position:absolute;top:-5px;right:-10px;background:#e53e3e;color:white;border-radius:50%;width:20px;height:20px;font-size:12px;display:none;align-items:center;justify-content:center;">0</span></a>
+            <div id="userMenu" style="position:relative;display:none;">
+                <button id="profileBtn" style="background:#667eea;color:white;border:none;padding:10px 20px;border-radius:6px;cursor:pointer;font-weight:600;"></button>
+            </div>
+            <a href="login.html" id="loginBtn" class="btn-primary">Login</a>
+        </div>
+    </nav>
+
+    <main class="container">
+
+<div style="padding: 40px 5%; background: white;">
+    <h2 class="page-title">Explore All Shops</h2>
+    <p style="text-align: center; color: #718096; font-size: 1.1rem; margin-top: -20px;">Find the perfect store for your needs</p>
+    
+    <div class="filters">
+        <select id="categoryFilter" onchange="filterShops()">
+            <option value="all">🏪 All Categories</option>
+            <option value="fashion">👗 Fashion</option>
+            <option value="grocery">🛒 Grocery</option>
+            <option value="home">🏠 Home & Kitchen</option>
+            <option value="electronics">📱 Electronics</option>
+            <option value="beauty">💄 Personal Care</option>
+            <option value="toys">🎨 Toys & Stationery</option>
+        </select>
+
+        <select id="floorFilter" onchange="filterShops()">
+            <option value="all">🏬 All Floors</option>
+            <option value="ground">Ground Floor</option>
+            <option value="1">1st Floor</option>
+            <option value="2">2nd Floor</option>
+            <option value="3">3rd Floor</option>
+        </select>
+    </div>
+</div>
+
+<div class="shop-grid" id="shopGrid">
+    <!-- Fashion Shops -->
+    <div class="shop-card" data-category="fashion" data-floor="1">
+        <img src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=400" alt="Max Fashion">
+        <h3>Max Fashion</h3>
+        <p>Men, Women & Kids Wear</p>
+        <div style="margin-top:15px;">
+            <a href="shop_max_fashion.html" class="btn-secondary" style="display:block;text-align:center;padding:12px;">View Shop</a>
+        </div>
+    </div>
+
+    <div class="shop-card" data-category="fashion" data-floor="1">
+        <img src="https://images.unsplash.com/photo-1534452203293-494d7ddbf7e0?w=400" alt="Trends">
+        <h3>Reliance Trends</h3>
+        <p>Ethnic & Western Wear</p>
+        <div style="margin-top:15px;">
+            <a href="shop_reliance_trends.html" class="btn-secondary" style="display:block;text-align:center;padding:12px;">View Shop</a>
+        </div>
+    </div>
+
+    <div class="shop-card" data-category="fashion" data-floor="1">
+        <img src="https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400" alt="Bata">
+        <h3>Bata Footwear</h3>
+        <p>Shoes, Sandals, Sports Shoes</p>
+        <div style="margin-top:15px;">
+            <a href="shop_bata.html" class="btn-secondary" style="display:block;text-align:center;padding:12px;">View Shop</a>
+        </div>
+    </div>
+
+    <div class="shop-card" data-category="fashion" data-floor="1">
+        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400" alt="Woodland">
+        <h3>Woodland</h3>
+        <p>Outdoor Footwear & Bags</p>
+        <div style="margin-top:15px;">
+            <a href="shop_woodland.html" class="btn-secondary" style="display:block;text-align:center;padding:12px;">View Shop</a>
+        </div>
+    </div>
+
+    <!-- Grocery Shops -->
+    <div class="shop-card" data-category="grocery" data-floor="ground">
+        <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=400" alt="Fresh Basket">
+        <h3>Fresh Basket</h3>
+        <p>Fruits, Vegetables, Dairy</p>
+        <div style="margin-top:15px;">
+            <a href="shop_fresh_basket.html" class="btn-secondary" style="display:block;text-align:center;padding:12px;">View Shop</a>
+        </div>
+    </div>
+
+    <div class="shop-card" data-category="grocery" data-floor="ground">
+        <img src="https://i.pinimg.com/736x/cd/e7/5f/cde75f7f310af5ac1acbeb3418b9591b.jpg" alt="Daily Needs">
+        <h3>Daily Needs Store</h3>
+        <p>Rice, Flour, Oil, Spices</p>
+        <div style="margin-top:15px;">
+            <a href="shop_daily_needs.html" class="btn-secondary" style="display:block;text-align:center;padding:12px;">View Shop</a>
+        </div>
+    </div>
+
+    <div class="shop-card" data-category="grocery" data-floor="ground">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_MN_Dm83Srkmzdf_aoPggc4KjoLybIQDdrA&s" alt="Big Bazaar">
+        <h3>Big Bazaar Grocery</h3>
+        <p>Snacks, Beverages, Packaged Food</p>
+        <div style="margin-top:15px;">
+            <a href="shop_big_bazaar.html" class="btn-secondary" style="display:block;text-align:center;padding:12px;">View Shop</a>
+        </div>
+    </div>
+
+    <!-- Home & Kitchen Shops -->
+    <div class="shop-card" data-category="home" data-floor="3">
+        <img src="https://images.unsplash.com/photo-1556911220-bff31c812dba?w=400" alt="Home Centre">
+        <h3>Home Centre</h3>
+        <p>Cookware, Utensils, Décor</p>
+        <div style="margin-top:15px;">
+            <a href="shop_home_centre.html" class="btn-secondary" style="display:block;text-align:center;padding:12px;">View Shop</a>
+        </div>
+    </div>
+
+    <div class="shop-card" data-category="home" data-floor="3">
+        <img src="https://cdn.shopify.com/s/files/1/0632/2526/6422/files/1_485026bf-1dda-41d1-bb7d-a57c8d824b1e.jpg?v=1764378569" alt="Kitchen World">
+        <h3>Kitchen World</h3>
+        <p>Pans, Pots, Storage Containers</p>
+        <div style="margin-top:15px;">
+            <a href="shop_kitchen_world.html" class="btn-secondary" style="display:block;text-align:center;padding:12px;">View Shop</a>
+        </div>
+    </div>
+
+    <!-- Electronics Shops -->
+    <div class="shop-card" data-category="electronics" data-floor="2">
+        <img src="https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400" alt="Croma">
+        <h3>Croma</h3>
+        <p>Mobiles, TV, Home Appliances</p>
+        <div style="margin-top:15px;">
+            <a href="shop_croma.html" class="btn-secondary" style="display:block;text-align:center;padding:12px;">View Shop</a>
+        </div>
+    </div>
+
+    <div class="shop-card" data-category="electronics" data-floor="2">
+        <img src="https://images.unsplash.com/photo-1512499617640-c74ae3a79d37?w=400" alt="Reliance Digital">
+        <h3>Reliance Digital</h3>
+        <p>Gadgets, Speakers, Smartwatch</p>
+        <div style="margin-top:15px;">
+            <a href="shop_reliance_digital.html" class="btn-secondary" style="display:block;text-align:center;padding:12px;">View Shop</a>
+        </div>
+    </div>
+
+    <!-- Personal Care Shops -->
+    <div class="shop-card" data-category="beauty" data-floor="2">
+        <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400" alt="Health & Glow">
+        <h3>Health & Glow</h3>
+        <p>Cosmetics, Skincare, Perfumes</p>
+        <div style="margin-top:15px;">
+            <a href="shop_health_glow.html" class="btn-secondary" style="display:block;text-align:center;padding:12px;">View Shop</a>
+        </div>
+    </div>
+
+    <div class="shop-card" data-category="beauty" data-floor="2">
+        <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=400" alt="Beauty World">
+        <h3>Beauty World</h3>
+        <p>Makeup, Hair Care, Sanitizers</p>
+        <div style="margin-top:15px;">
+            <a href="shop_beauty_world.html" class="btn-secondary" style="display:block;text-align:center;padding:12px;">View Shop</a>
+        </div>
+    </div>
+
+    <!-- Toys & Stationery Shops -->
+    <div class="shop-card" data-category="toys" data-floor="3">
+        <img src="https://images.unsplash.com/photo-1515488764276-beab7607c1e6?w=400" alt="Toy Planet">
+        <h3>Toy Planet</h3>
+        <p>Toys, Games, Kids Items</p>
+        <div style="margin-top:15px;">
+            <a href="shop_toy_planet.html" class="btn-secondary" style="display:block;text-align:center;padding:12px;">View Shop</a>
+        </div>
+    </div>
+
+    <div class="shop-card" data-category="toys" data-floor="3">
+        <img src="https://ahs.atlantichealth.org/content/atlantichealth-v2/en/patients-visitors/hospital-stays-visits/gift-shops-flowers/_jcr_content/par/section_1254477572/col1/textimage_copy/image.img.jpg/1703870910809.jpg" alt="Archies">
+        <h3>Archies Gift Store</h3>
+        <p>Gifts, Cards, Stationery</p>
+        <div style="margin-top:15px;">
+            <a href="shop_archies.html" class="btn-secondary" style="display:block;text-align:center;padding:12px;">View Shop</a>
+        </div>
+    </div>
+</div>
+
+<script>
+// Auto-filter on page load based on URL parameter
+window.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const categoryParam = urlParams.get('category');
+    
+    if (categoryParam) {
+        document.getElementById('categoryFilter').value = categoryParam;
+        filterShops();
+    }
+});
+
+function filterShops() {
+    const category = document.getElementById('categoryFilter').value;
+    const floor = document.getElementById('floorFilter').value;
+    const shops = document.querySelectorAll('.shop-card');
+    
+    shops.forEach(shop => {
+        const shopCategory = shop.getAttribute('data-category');
+        const shopFloor = shop.getAttribute('data-floor');
+        
+        const categoryMatch = category === 'all' || shopCategory === category;
+        const floorMatch = floor === 'all' || shopFloor === floor;
+        
+        if (categoryMatch && floorMatch) {
+            shop.style.display = 'block';
+        } else {
+            shop.style.display = 'none';
+        }
+    });
+}
+        
+
+    </script>
+    
+    <script src="static/js/config.js"></script>
+    <script src="static/js/auth.js"></script>
+    <script src="static/js/cart.js"></script>
+    <script src="static/js/wishlist.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = authService.getCurrentUser();
+            if (user) {
+                document.getElementById('loginBtn').style.display = 'none';
+                document.getElementById('userMenu').style.display = 'block';
+                document.getElementById('profileBtn').textContent = user.name;
+                
+                // Handle pending cart item after login
+                if (typeof cartManager !== 'undefined') {
+                    cartManager.handlePendingCartItem();
+                }
+            }
+            
+            // Initialize badges
+            if (typeof cartManager !== 'undefined') {
+                cartManager.updateCartBadge();
+            }
+            if (typeof wishlistManager !== 'undefined') {
+                wishlistManager.updateWishlistBadge();
+            }
+        });
+    </script>
+
+    </main>
+
+    <footer class="footer">
+        <div style="max-width: 1400px; margin: 0 auto;">
+            <p>© 2025 SuperMall — Your Smart Shopping Destination</p>
+            <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">Discover • Compare • Shop</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>

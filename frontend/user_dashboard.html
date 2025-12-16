@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Dashboard - SuperMall</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/main.css">
+    <link rel="stylesheet" href="static/css/components.css">
+    <link rel="stylesheet" href="static/css/dashboard.css">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="nav-left">
+            <span class="logo-text">🛒 SuperMall</span>
+        </div>
+        <div class="nav-right">
+            <a href="index.html">Home</a>
+            <a href="shop_list.html">Shops</a>
+            <a href="compare.html">Compare</a>
+            <a href="index.html" class="btn-primary" onclick="logout()">Logout</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        
+<div class="dashboard">
+
+    <aside class="sidebar">
+        <h3>👤 User Panel</h3>
+        <a href="#" onclick="showSection('overview')">📊 Dashboard</a>
+        <a href="shop_list.html">🏪 Browse Shops</a>
+        <a href="compare.html">⚖️ Compare Products</a>
+        <a href="#" onclick="showSection('offers')">🎁 View Offers</a>
+        <a href="#" onclick="showSection('orders')">📦 My Orders</a>
+        <a href="index.html">🏠 Back to Home</a>
+    </aside>
+
+    <main class="dashboard-content">
+        <div id="overview">
+            <h2>Welcome, User 👋</h2>
+            <p>Explore shops, compare products, and find amazing deals</p>
+            
+            <div class="dashboard-cards">
+                <div class="dashboard-card">
+                    <h3>Total Shops</h3>
+                    <div class="stat">20</div>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Categories</h3>
+                    <div class="stat">7</div>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Active Offers</h3>
+                    <div class="stat">15</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px;">
+                <h3 style="font-size: 1.5rem; margin-bottom: 20px;">Quick Actions</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                    <a href="shop_list.html" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 12px; text-decoration: none; text-align: center;">
+                        <div style="font-size: 2rem;">🏪</div>
+                        <div style="margin-top: 10px; font-weight: 600;">Browse Shops</div>
+                    </a>
+                    <a href="compare.html" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 30px; border-radius: 12px; text-decoration: none; text-align: center;">
+                        <div style="font-size: 2rem;">⚖️</div>
+                        <div style="margin-top: 10px; font-weight: 600;">Compare Products</div>
+                    </a>
+                    <a href="#" onclick="showSection('offers')" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 30px; border-radius: 12px; text-decoration: none; text-align: center;">
+                        <div style="font-size: 2rem;">🎁</div>
+                        <div style="margin-top: 10px; font-weight: 600;">View Offers</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="offers" style="display: none;">
+            <h2>🎁 Active Offers</h2>
+            <p>Exclusive deals and discounts from our shops</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-top: 30px;">
+                <div style="background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+                    <h3 style="color: #667eea;">Apple Store - 10% Off</h3>
+                    <p style="color: #718096; margin: 10px 0;">Get 10% discount on iPhone 15 Pro</p>
+                    <p style="color: #e53e3e; font-weight: 600;">Valid till: 31 Dec 2025</p>
+                </div>
+                <div style="background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+                    <h3 style="color: #667eea;">Zara - Buy 2 Get 1 Free</h3>
+                    <p style="color: #718096; margin: 10px 0;">On all fashion items</p>
+                    <p style="color: #e53e3e; font-weight: 600;">Valid till: 15 Jan 2025</p>
+                </div>
+                <div style="background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+                    <h3 style="color: #667eea;">Starbucks - 20% Off</h3>
+                    <p style="color: #718096; margin: 10px 0;">On all beverages above ₹300</p>
+                    <p style="color: #e53e3e; font-weight: 600;">Valid till: 20 Jan 2025</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="orders" style="display: none;">
+            <h2>📦 My Orders</h2>
+            <p>Track your recent purchases</p>
+            
+            <div style="background: white; padding: 40px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin-top: 30px; text-align: center;">
+                <div style="font-size: 4rem; margin-bottom: 20px;">📦</div>
+                <h3 style="color: #718096;">No orders yet</h3>
+                <p style="color: #a0aec0; margin: 15px 0;">Start shopping to see your orders here</p>
+                <a href="shop_list.html" class="btn-primary" style="margin-top: 20px;">Browse Shops</a>
+            </div>
+        </div>
+
+    </main>
+
+</div>
+
+    </main>
+
+    <footer class="footer">
+        <div style="max-width: 1400px; margin: 0 auto;">
+            <p>© 2025 SuperMall — Your Smart Shopping Destination</p>
+            <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">Discover • Compare • Shop</p>
+        </div>
+    </footer>
+
+    <script>
+    function showSection(section) {
+        document.getElementById('overview').style.display = 'none';
+        document.getElementById('offers').style.display = 'none';
+        document.getElementById('orders').style.display = 'none';
+        document.getElementById(section).style.display = 'block';
+    }
+
+    function logout() {
+        localStorage.removeItem('user');
+        alert('Logged out successfully!');
+    }
+    </script>
+
+</body>
+
+</html>

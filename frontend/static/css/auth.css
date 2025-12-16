@@ -1,0 +1,97 @@
+/* ---------- AUTH PAGE CONTAINER ---------- */
+.auth-container {
+    width: 100%;
+    min-height: 85vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 40px 20px;
+}
+
+/* ---------- AUTH BOX ---------- */
+.auth-box {
+    width: 100%;
+    max-width: 440px;
+    background: white;
+    padding: 50px 40px;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    text-align: center;
+}
+
+.auth-box h2 {
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+    color: #1a202c;
+    font-weight: 700;
+}
+
+.auth-subtitle {
+    font-size: 1rem;
+    color: #718096;
+    margin-bottom: 35px;
+}
+
+/* ---------- INPUT GROUP ---------- */
+.input-group {
+    text-align: left;
+    margin-bottom: 22px;
+}
+
+.input-group label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #2d3748;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.input-group input,
+.input-group select {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 2px solid #e2e8f0;
+    font-size: 1rem;
+    font-family: "Poppins", sans-serif;
+    transition: all 0.3s;
+    background: white;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+}
+
+.input-group input::placeholder {
+    color: #a0aec0;
+}
+
+/* ---------- BUTTONS ---------- */
+.full-btn {
+    width: 100%;
+    padding: 14px;
+    font-size: 1.05rem;
+    margin-top: 15px;
+}
+
+/* ---------- SWITCH TEXT ---------- */
+.auth-switch {
+    margin-top: 25px;
+    font-size: 0.95rem;
+    color: #4a5568;
+}
+
+.auth-switch a {
+    color: #667eea;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.auth-switch a:hover {
+    color: #5568d3;
+}

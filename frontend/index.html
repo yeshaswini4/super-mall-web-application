@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SuperMall - Smart Marketplace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/main.css">
+    <link rel="stylesheet" href="static/css/components.css">
+    <link rel="stylesheet" href="static/css/mobile.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-left">
+            <span class="logo-text">🛒 SuperMall</span>
+        </div>
+        <div class="nav-right">
+            <a href="index.html">Home</a>
+            <a href="shop_list.html">Shops</a>
+            <a href="offers.html">Offers</a>
+            <a href="compare.html">Compare</a>
+            <a href="wishlist.html" style="position:relative;">❤️ Wishlist <span id="wishlistBadge" style="position:absolute;top:-5px;right:-10px;background:#e53e3e;color:white;border-radius:50%;width:20px;height:20px;font-size:12px;display:none;align-items:center;justify-content:center;">0</span></a>
+            <a href="cart.html" style="position:relative;">🛒 Cart <span id="cartBadge" style="position:absolute;top:-5px;right:-10px;background:#e53e3e;color:white;border-radius:50%;width:20px;height:20px;font-size:12px;display:none;align-items:center;justify-content:center;">0</span></a>
+            <div id="userMenu" style="position:relative;display:none;">
+                <button id="profileBtn" style="background:#667eea;color:white;border:none;padding:10px 20px;border-radius:6px;cursor:pointer;font-weight:600;"></button>
+                <div id="profileDropdown" style="display:none;position:absolute;right:0;top:45px;background:white;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.15);min-width:200px;z-index:1000;">
+                    <div style="padding:15px;border-bottom:1px solid #e2e8f0;">
+                        <div style="font-weight:600;color:#2d3748;" id="userName"></div>
+                        <div style="font-size:12px;color:#718096;margin-top:5px;" id="userEmail"></div>
+                        <div style="font-size:12px;color:#667eea;margin-top:5px;font-weight:600;" id="userRole"></div>
+                    </div>
+                    <a href="#" id="dashboardLink" style="display:block;padding:12px 15px;color:#2d3748;text-decoration:none;">📋 Dashboard</a>
+                    <a href="#" onclick="handleLogout()" style="display:block;padding:12px 15px;color:#e53e3e;text-decoration:none;border-top:1px solid #e2e8f0;">🚪 Logout</a>
+                </div>
+            </div>
+            <a href="login.html" id="loginBtn" class="btn-primary">Login</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- Mega Sale Banner -->
+        <div style="background:linear-gradient(135deg,#ff6b6b 0%,#ee5a6f 100%);color:white;padding:20px;border-radius:12px;margin:20px 0;text-align:center;animation:pulse 2s infinite;">
+            <h2 style="margin:0;font-size:32px;text-shadow:2px 2px 4px rgba(0,0,0,0.3);">🎉 MEGA MILLION SALE 🎉</h2>
+            <p style="margin:10px 0;font-size:20px;font-weight:600;">Up to 70% OFF on Electronics, Fashion & More!</p>
+            <a href="offers.html" style="display:inline-block;background:white;color:#ff6b6b;padding:12px 30px;border-radius:25px;text-decoration:none;font-weight:700;margin-top:10px;">Shop Now →</a>
+        </div>
+        <style>@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.02)}}</style>
+
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Welcome to <span>SuperMall</span></h1>
+                <p>Discover shops, compare products, and explore amazing offers — all in one place.</p>
+                <a href="shop_list.html" class="btn-primary">Explore Shops</a>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600" alt="SuperMall Banner">
+            </div>
+        </section>
+
+        <section class="categories">
+            <h2 class="section-title">Shop by Category</h2>
+            <div class="category-grid">
+                <a href="shop_list.html?category=fashion" class="category-card" style="text-decoration: none; color: inherit;">
+                    <div style="font-size: 60px;">👗</div>
+                    <p>Fashion</p>
+                    <small style="color: #718096; font-size: 0.85rem;">Clothes & Footwear</small>
+                </a>
+                <a href="shop_list.html?category=grocery" class="category-card" style="text-decoration: none; color: inherit;">
+                    <div style="font-size: 60px;">🛒</div>
+                    <p>Grocery</p>
+                    <small style="color: #718096; font-size: 0.85rem;">Daily Essentials</small>
+                </a>
+                <a href="shop_list.html?category=home" class="category-card" style="text-decoration: none; color: inherit;">
+                    <div style="font-size: 60px;">🏠</div>
+                    <p>Home & Kitchen</p>
+                    <small style="color: #718096; font-size: 0.85rem;">Cookware, Decor</small>
+                </a>
+                <a href="shop_list.html?category=electronics" class="category-card" style="text-decoration: none; color: inherit;">
+                    <div style="font-size: 60px;">📱</div>
+                    <p>Electronics</p>
+                    <small style="color: #718096; font-size: 0.85rem;">Gadgets, Appliances</small>
+                </a>
+                <a href="shop_list.html?category=beauty" class="category-card" style="text-decoration: none; color: inherit;">
+                    <div style="font-size: 60px;">💄</div>
+                    <p>Personal Care</p>
+                    <small style="color: #718096; font-size: 0.85rem;">Beauty & Health</small>
+                </a>
+                <a href="shop_list.html?category=toys" class="category-card" style="text-decoration: none; color: inherit;">
+                    <div style="font-size: 60px;">🎨</div>
+                    <p>Toys & Stationery</p>
+                    <small style="color: #718096; font-size: 0.85rem;">Gifts, Games</small>
+                </a>
+            </div>
+        </section>
+
+        <section class="shops">
+            <h2 class="section-title">Featured Shops</h2>
+            <div class="shop-card-container">
+                <div class="shop-card">
+                    <img src="https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400" alt="Electronics Shop">
+                    <h3>Tech World Electronics</h3>
+                    <p>Latest smartphones, laptops & gadgets</p>
+                    <a href="shop_electronics.html" class="btn-secondary">View Shop</a>
+                </div>
+                <div class="shop-card">
+                    <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=400" alt="Grocery Shop">
+                    <h3>Fresh Mart Grocery</h3>
+                    <p>Organic vegetables, fruits & daily needs</p>
+                    <a href="shop_grocery.html" class="btn-secondary">View Shop</a>
+                </div>
+                <div class="shop-card">
+                    <img src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=400" alt="Fashion Shop">
+                    <h3>Royal Fashion Store</h3>
+                    <p>Trendy clothing, shoes & accessories</p>
+                    <a href="shop_fashion.html" class="btn-secondary">View Shop</a>
+                </div>
+                <div class="shop-card">
+                    <img src="https://images.unsplash.com/photo-1556911220-bff31c812dba?w=400" alt="Home Shop">
+                    <h3>Home Centre</h3>
+                    <p>Furniture, decor & home essentials</p>
+                    <a href="shop_home_centre.html" class="btn-secondary">View Shop</a>
+                </div>
+                <div class="shop-card">
+                    <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400" alt="Beauty Shop">
+                    <h3>Health & Glow</h3>
+                    <p>Cosmetics, skincare & wellness products</p>
+                    <a href="shop_health_glow.html" class="btn-secondary">View Shop</a>
+                </div>
+                <div class="shop-card">
+                    <img src="https://images.unsplash.com/photo-1515488764276-beab7607c1e6?w=400" alt="Toy Shop">
+                    <h3>Toy Planet</h3>
+                    <p>Toys, games & kids entertainment</p>
+                    <a href="shop_toy_planet.html" class="btn-secondary">View Shop</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div style="max-width: 1400px; margin: 0 auto;">
+            <p>© 2025 SuperMall — Your Smart Shopping Destination</p>
+            <p style="margin-top: 10px; font-size: 0.9rem;">Built with ❤️ for seamless shopping experience</p>
+        </div>
+    </footer>
+
+    <script src="static/js/auth.js"></script>
+    <script src="static/js/api.js"></script>
+    <script src="static/js/cart.js"></script>
+    <script>
+        function updateAuthUI() {
+            authService.updateUI();
+        }
+        
+        function handleLogout() {
+            authService.logout();
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAuthUI();
+            if (typeof updateCartBadge === 'function') updateCartBadge();
+            if (typeof updateWishlistBadge === 'function') updateWishlistBadge();
+        });
+    </script>
+</body>
+</html>em; opacity: 0.8;">Discover • Compare • Shop</p>
+        </div>
+    </footer>
+
+    <script src="static/js/api.js"></script>
+    <script src="static/js/auth.js"></script>
+    <script src="static/js/cart.js"></script>
+    <script src="static/js/wishlist.js"></script>
+    <script src="static/js/ui.js"></script>
+    <script>
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                authService.logout();
+            }
+        }
+    </script>
+</body>
+</html>
+        </div>
+    </footer>
+
+    <script src="static/js/config.js"></script>
+    <script src="static/js/auth.js"></script>
+    <script src="static/js/cart.js"></script>
+    <script src="static/js/wishlist.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = authService.getCurrentUser();
+            
+            if (user) {
+                document.getElementById('loginBtn').style.display = 'none';
+                document.getElementById('userMenu').style.display = 'block';
+                document.getElementById('profileBtn').textContent = user.name;
+                document.getElementById('userName').textContent = user.name;
+                document.getElementById('userEmail').textContent = user.email;
+                document.getElementById('userRole').textContent = user.role.toUpperCase();
+                
+                const dashboardLink = document.getElementById('dashboardLink');
+                if (user.role === 'admin') {
+                    dashboardLink.href = 'admin_dashboard.html';
+                } else if (user.role === 'merchant') {
+                    dashboardLink.href = 'merchant_dashboard.html';
+                } else {
+                    dashboardLink.href = 'customer_dashboard.html';
+                }
+                
+                document.getElementById('profileBtn').onclick = () => {
+                    const dropdown = document.getElementById('profileDropdown');
+                    dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+                };
+                
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('#userMenu')) {
+                        document.getElementById('profileDropdown').style.display = 'none';
+                    }
+                });
+            }
+            
+            if (user && typeof cartManager !== 'undefined') {
+                cartManager.handlePendingCartItem();
+            }
+            
+            // Initialize badges
+            if (typeof cartManager !== 'undefined') {
+                cartManager.updateCartBadge();
+            }
+            if (typeof wishlistManager !== 'undefined') {
+                wishlistManager.updateWishlistBadge();
+            }
+        });
+
+      
+    </script>
+</body>
+</html>

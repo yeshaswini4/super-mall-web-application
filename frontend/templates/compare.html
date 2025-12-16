@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div style="padding: 60px 5%; min-height: 70vh;">
+
+    <h2 class="section-title">⚖️ Compare Products</h2>
+    <p style="text-align: center; color: #718096; font-size: 1.1rem; margin-top: -20px; margin-bottom: 40px;">
+        Select two products to compare their specifications & prices
+    </p>
+
+    <!-- SELECT PANEL -->
+    <div class="compare-panel">
+        <div class="input-group">
+            <label>📦 Select Product A</label>
+            <select id="compareA" class="compare-select">
+                <option value="">Choose a product...</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>📦 Select Product B</label>
+            <select id="compareB" class="compare-select">
+                <option value="">Choose a product...</option>
+            </select>
+        </div>
+
+        <button class="btn-primary" onclick="compareSelected()">⚖️ Compare Now</button>
+    </div>
+
+    <!-- LOADING -->
+    <div id="loading" style="text-align:center; display:none; margin: 40px;">
+        <div class="spinner"></div>
+        <p>Comparing products...</p>
+    </div>
+
+    <!-- RESULT -->
+    <div id="compareResult" style="margin-top: 40px;"></div>
+</div>
+
+<!-- JS Files -->
+<script src="{% static 'js/products.js' %}"></script>
+<script src="{% static 'js/compare.js' %}"></script>
+
+{% endblock %}

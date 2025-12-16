@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reliance Digital - SuperMall</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/main.css">
+    <style>
+        .shop-header { background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%); color: white; padding: 60px 20px; text-align: center; margin-top: 70px; }
+        .products-section { max-width: 1400px; margin: 40px auto; padding: 20px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; margin-top: 30px; }
+        .product-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); transition: transform 0.3s; }
+        .product-card:hover { transform: translateY(-5px); }
+        .product-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 15px; }
+        .product-card h3 { font-size: 1.1rem; margin-bottom: 10px; }
+        .product-price { font-size: 1.5rem; font-weight: 700; color: #3182ce; margin: 10px 0; }
+        .btn-cart { background: #48bb78; color: white; padding: 10px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; margin: 5px 0; }
+        .btn-wishlist { background: #f56565; color: white; padding: 10px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; margin: 5px 0; }
+        .product-buttons { display: flex; gap: 10px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-left"><span class="logo-text">🛒 SuperMall</span></div>
+        <div class="nav-right">
+            <a href="index.html">Home</a>
+            <a href="shop_list.html">Shops</a>
+            <a href="wishlist.html" style="position:relative;">❤️ Wishlist <span id="wishlistBadge" style="position:absolute;top:-5px;right:-10px;background:#e53e3e;color:white;border-radius:50%;width:20px;height:20px;font-size:12px;display:none;align-items:center;justify-content:center;">0</span></a>
+            <a href="cart.html" style="position:relative;">🛒 Cart <span id="cartBadge" style="position:absolute;top:-5px;right:-10px;background:#e53e3e;color:white;border-radius:50%;width:20px;height:20px;font-size:12px;display:none;align-items:center;justify-content:center;">0</span></a>
+            <div id="userMenu" style="position:relative;display:none;">
+                <button id="profileBtn" style="background:#667eea;color:white;border:none;padding:10px 20px;border-radius:6px;cursor:pointer;font-weight:600;"></button>
+            </div>
+            <a href="login.html" id="loginBtn" class="btn-primary">Login</a>
+        </div>
+    </nav>
+
+    <div class="shop-header">
+        <h1>📱 Reliance Digital</h1>
+        <p>Gadgets, Speakers, Smartwatch</p>
+        <p style="margin-top: 10px; opacity: 0.9;">Floor 2 | Electronics</p>
+    </div>
+
+    <div class="products-section">
+        <h2>Our Products</h2>
+        <div class="product-grid">
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400" alt="Smartwatch">
+                <h3>Apple Watch Series 9</h3>
+                <div class="product-price">₹41,900</div>
+                <p style="color: #666; font-size: 0.9rem;">GPS + Cellular model</p>
+                <div class="product-buttons">
+                    <button class="btn-cart" onclick="addToCart('Apple Watch Series 9', 41900)" style="flex:1;">🛒 Cart</button>
+                    <button class="btn-wishlist" onclick="addToWishlist('Apple Watch Series 9', 41900)" style="flex:1;">❤️ Wish</button>
+                </div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400" alt="Bluetooth Speaker">
+                <h3>JBL Bluetooth Speaker</h3>
+                <div class="product-price">₹4,999</div>
+                <p style="color: #666; font-size: 0.9rem;">Waterproof portable speaker</p>
+                <div class="product-buttons">
+                    <button class="btn-cart" onclick="addToCart('JBL Bluetooth Speaker', 4999)" style="flex:1;">🛒 Cart</button>
+                    <button class="btn-wishlist" onclick="addToWishlist('JBL Bluetooth Speaker', 4999)" style="flex:1;">❤️ Wish</button>
+                </div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400" alt="Headphones">
+                <h3>Sony Wireless Headphones</h3>
+                <div class="product-price">₹12,990</div>
+                <p style="color: #666; font-size: 0.9rem;">Noise cancelling</p>
+                <div class="product-buttons">
+                    <button class="btn-cart" onclick="addToCart('Sony Wireless Headphones', 12990)" style="flex:1;">🛒 Cart</button>
+                    <button class="btn-wishlist" onclick="addToWishlist('Sony Wireless Headphones', 12990)" style="flex:1;">❤️ Wish</button>
+                </div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?w=400" alt="Power Bank">
+                <h3>Power Bank 20000mAh</h3>
+                <div class="product-price">₹2,499</div>
+                <p style="color: #666; font-size: 0.9rem;">Fast charging support</p>
+                <div class="product-buttons">
+                    <button class="btn-cart" onclick="addToCart('Power Bank 20000mAh', 2499)" style="flex:1;">🛒 Cart</button>
+                    <button class="btn-wishlist" onclick="addToWishlist('Power Bank 20000mAh', 2499)" style="flex:1;">❤️ Wish</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer"><p>© 2025 SuperMall</p></footer>
+
+    <script src="static/js/config.js"></script>
+    <script src="static/js/auth.js"></script>
+    <script src="static/js/cart.js"></script>
+    <script src="static/js/wishlist.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = authService.getCurrentUser();
+            if (user) {
+                document.getElementById('loginBtn').style.display = 'none';
+                document.getElementById('userMenu').style.display = 'block';
+                document.getElementById('profileBtn').textContent = user.name;
+            }
+        });
+
+        function addToCart(name, price) {
+            const product = {
+                id: Date.now(),
+                name: name,
+                price: price / 83,
+                shopName: 'Reliance Digital',
+                category: 'electronics',
+                image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400'
+            };
+            cartManager.addToCart(product);
+        }
+
+        function addToWishlist(name, price) {
+            const product = {
+                id: Date.now() + Math.random(),
+                name: name,
+                price: price / 83,
+                shopName: 'Reliance Digital',
+                category: 'electronics',
+                image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400'
+            };
+            wishlistManager.addToWishlist(product);
+        }
+    </script>
+</body>
+</html>
