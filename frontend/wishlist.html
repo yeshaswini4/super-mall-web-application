@@ -44,63 +44,205 @@
 
     <script src="static/js/config.js"></script>
     <script src="static/js/auth.js"></script>
-    <script src="static/js/cart.js"></script>
-    <script src="static/js/wishlist.js"></script>
+    <script src="static/js/enhanced-cart.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Get user info and display properly
+            await authService.init();
             const user = authService.getCurrentUser();
-            if (user) {
-                document.getElementById('loginBtn').style.display = 'none';
-                document.getElementById('userMenu').style.display = 'block';
-                document.getElementById('profileBtn').textContent = user.name;
-            }
             
-            displayWishlist();
+            // Force show user menu and hide login button
+            document.getElementById('loginBtn').style.display = 'none';
+            document.getElementById('userMenu').style.display = 'block';
+            document.getElementById('profileBtn').textContent = user?.username || 'User';
+            
+            // Try to load wishlist directly from API
+            try {
+                const response = await fetch('http://127.0.0.1:8000/api/wishlist/', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                console.log('Wishlist API response status:', response.status);
+                
+                if (response.ok) {
+                    const wishlist = await response.json();
+                    console.log('Wishlist data:', wishlist);
+                    console.log('Wishlist length:', wishlist.length);
+                    displayWishlistItems(wishlist);
+                } else {
+                    console.log('Wishlist API failed with status:', response.status);
+                    // Fallback: show items from localStorage
+                    showLocalStorageWishlist();
+                }
+            } catch (error) {
+                console.log('Wishlist error:', error);
+                // Fallback: show items from localStorage
+                showLocalStorageWishlist();
+            }
         });
-
-        function displayWishlist() {
-            const wishlist = wishlistManager.getWishlist();
+        
+        function showLocalStorageWishlist() {
+            // Check localStorage for any stored wishlist items
+            const localStorageKeys = Object.keys(localStorage).filter(key => 
+                key.startsWith('wishlist_product_')
+            );
+            console.log('LocalStorage wishlist keys:', localStorageKeys);
+            
+            if (localStorageKeys.length > 0) {
+                const wishlistItems = document.getElementById('wishlistItems');
+                const items = localStorageKeys.map((key, index) => {
+                    try {
+                        const productDetails = JSON.parse(localStorage.getItem(key));
+                        return `
+                            <div class="wishlist-item">
+                                <img src="${productDetails.image}" alt="${productDetails.name}">
+                                <div class="wishlist-item-info">
+                                    <h3>${productDetails.name}</h3>
+                                    <p style="color: #718096;">${productDetails.shopName || productDetails.category}</p>
+                                    <div class="price">₹${Math.round(productDetails.price * 83)}</div>
+                                </div>
+                                <div>
+                                    <button class="btn-add-cart" onclick="addToCartFromLocal('${key}')">Add to Cart</button>
+                                    <button class="btn-remove" onclick="removeFromLocal('${key}')">Remove</button>
+                                </div>
+                            </div>
+                        `;
+                    } catch (e) {
+                        return '';
+                    }
+                }).filter(item => item).join('');
+                
+                if (items) {
+                    wishlistItems.innerHTML = items;
+                } else {
+                    showEmptyWishlist();
+                }
+            } else {
+                showEmptyWishlist();
+            }
+        }
+        
+        function displayWishlistItems(wishlist) {
             const wishlistItems = document.getElementById('wishlistItems');
-
+            
             if (wishlist.length === 0) {
-                wishlistItems.innerHTML = `
-                    <div class="empty-wishlist">
-                        <h2>Your wishlist is empty</h2>
-                        <p>Add some products to your wishlist</p>
-                        <a href="shop_list.html" class="btn-primary">Browse Shops</a>
-                    </div>
-                `;
+                showEmptyWishlist();
                 return;
             }
-
-            wishlistItems.innerHTML = wishlist.map(item => `
-                <div class="wishlist-item">
-                    <img src="${item.image}" alt="${item.name}">
-                    <div class="wishlist-item-info">
-                        <h3>${item.name}</h3>
-                        <p style="color: #718096;">${item.shopName || 'SuperMall'}</p>
-                        <div class="price">₹${Math.round(item.price * 83)}</div>
+            
+            wishlistItems.innerHTML = wishlist.map(item => {
+                // Try to find stored product details
+                let productDetails = null;
+                const productId = item.product.id;
+                
+                for (let i = 0; i < localStorage.length; i++) {
+                    const key = localStorage.key(i);
+                    if (key && key.startsWith('wishlist_product_') && key.includes(`${productId}_`)) {
+                        try {
+                            productDetails = JSON.parse(localStorage.getItem(key));
+                            break;
+                        } catch (e) {}
+                    }
+                }
+                
+                const displayName = productDetails?.name || item.product.name;
+                const displayPrice = productDetails?.price || item.product.price;
+                const displayImage = productDetails?.image || item.product.image || 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400';
+                const displayCategory = productDetails?.shopName || productDetails?.category || item.product.category || 'SuperMall';
+                
+                return `
+                    <div class="wishlist-item">
+                        <img src="${displayImage}" alt="${displayName}">
+                        <div class="wishlist-item-info">
+                            <h3>${displayName}</h3>
+                            <p style="color: #718096;">${displayCategory}</p>
+                            <div class="price">₹${Math.round(displayPrice * 83)}</div>
+                        </div>
+                        <div>
+                            <button class="btn-add-cart" onclick="moveToCart(${item.id}, ${item.product.id})">Add to Cart</button>
+                            <button class="btn-remove" onclick="removeFromWishlist(${item.id})">Remove</button>
+                        </div>
                     </div>
-                    <div>
-                        <button class="btn-add-cart" onclick="moveToCart(${item.id})">Add to Cart</button>
-                        <button class="btn-remove" onclick="removeFromWishlist(${item.id})">Remove</button>
-                    </div>
+                `;
+            }).join('');
+        }
+        
+        function showEmptyWishlist() {
+            document.getElementById('wishlistItems').innerHTML = `
+                <div class="empty-wishlist">
+                    <h2>Your wishlist is empty</h2>
+                    <p>Add some products to your wishlist</p>
+                    <a href="shop_list.html" class="btn-primary">Browse Shops</a>
                 </div>
-            `).join('');
+            `;
+        }
+        
+        function showLoginMessage() {
+            document.getElementById('wishlistItems').innerHTML = `
+                <div class="empty-wishlist">
+                    <h2>Please login to view your wishlist</h2>
+                    <p>Sign in to save and manage your favorite products</p>
+                    <a href="login.html" class="btn-primary">Login Now</a>
+                </div>
+            `;
         }
 
-        function removeFromWishlist(id) {
-            wishlistManager.removeFromWishlist(id);
-            displayWishlist();
-        }
-
-        function moveToCart(id) {
-            const item = wishlistManager.getWishlist().find(item => item.id === id);
-            if (item) {
-                cartManager.addToCart(item);
-                wishlistManager.removeFromWishlist(id);
-                displayWishlist();
+        async function removeFromWishlist(wishlistId) {
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/api/wishlist/${wishlistId}/`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    location.reload(); // Reload page to refresh wishlist
+                }
+            } catch (error) {
+                console.error('Remove failed:', error);
             }
+        }
+
+        async function moveToCart(wishlistId, productId) {
+            try {
+                // Add to cart
+                await fetch('http://127.0.0.1:8000/api/cart/', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ product_id: productId, quantity: 1 })
+                });
+                
+                // Remove from wishlist
+                await removeFromWishlist(wishlistId);
+            } catch (error) {
+                console.error('Move to cart failed:', error);
+            }
+        }
+        
+        function addToCartFromLocal(localKey) {
+            try {
+                const productDetails = JSON.parse(localStorage.getItem(localKey));
+                // Add to cart using universal function
+                addToCart(productDetails.name, productDetails.price * 83, productDetails.shopName, productDetails.category);
+                // Remove from localStorage
+                localStorage.removeItem(localKey);
+                location.reload();
+            } catch (error) {
+                console.error('Add to cart from local failed:', error);
+            }
+        }
+        
+        function removeFromLocal(localKey) {
+            localStorage.removeItem(localKey);
+            location.reload();
         }
     </script>
 </body>

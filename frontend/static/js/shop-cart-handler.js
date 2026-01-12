@@ -46,14 +46,33 @@ class ShopCartHandler {
     }
 
     // Add product to cart
-    addToCart(productId) {
+    async addToCart(productId) {
         const product = productManager.getProduct(productId);
         if (product) {
-            cartManager.addToCart({
-                ...product, 
-                shopName: this.shopName,
-                category: this.shopCategory
-            });
+            // Check if user is authenticated
+            const user = authService.getCurrentUser();
+            if (!user) {
+                alert('Please login to add items to cart');
+                window.location.href = 'login.html?redirect=' + encodeURIComponent(window.location.href);
+                return;
+            }
+            
+            try {
+                // Use enhanced cart manager if available, otherwise fallback to regular cart
+                if (typeof enhancedCartManager !== 'undefined' && enhancedCartManager) {
+                    await enhancedCartManager.addToCart(productId, 1);
+                } else {
+                    // Fallback to old cart manager
+                    cartManager.addToCart({
+                        ...product, 
+                        shopName: this.shopName,
+                        category: this.shopCategory
+                    });
+                }
+            } catch (error) {
+                console.error('Failed to add to cart:', error);
+                alert('Failed to add item to cart. Please try again.');
+            }
         }
     }
 }

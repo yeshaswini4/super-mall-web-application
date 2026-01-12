@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data: blob:; connect-src 'self' http://127.0.0.1:8000 https:; img-src 'self' https: data: blob:;">
     <title>SuperMall - Smart Marketplace</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="static/css/main.css">
@@ -93,111 +94,35 @@
             </div>
         </section>
 
-        <section class="shops">
-            <h2 class="section-title">Featured Shops</h2>
-            <div class="shop-card-container">
-                <div class="shop-card">
-                    <img src="https://images.unsplash.com/photo-1498049794561-7780e7231661?w=400" alt="Electronics Shop">
-                    <h3>Tech World Electronics</h3>
-                    <p>Latest smartphones, laptops & gadgets</p>
-                    <a href="shop_electronics.html" class="btn-secondary">View Shop</a>
-                </div>
-                <div class="shop-card">
-                    <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=400" alt="Grocery Shop">
-                    <h3>Fresh Mart Grocery</h3>
-                    <p>Organic vegetables, fruits & daily needs</p>
-                    <a href="shop_grocery.html" class="btn-secondary">View Shop</a>
-                </div>
-                <div class="shop-card">
-                    <img src="https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=400" alt="Fashion Shop">
-                    <h3>Royal Fashion Store</h3>
-                    <p>Trendy clothing, shoes & accessories</p>
-                    <a href="shop_fashion.html" class="btn-secondary">View Shop</a>
-                </div>
-                <div class="shop-card">
-                    <img src="https://images.unsplash.com/photo-1556911220-bff31c812dba?w=400" alt="Home Shop">
-                    <h3>Home Centre</h3>
-                    <p>Furniture, decor & home essentials</p>
-                    <a href="shop_home_centre.html" class="btn-secondary">View Shop</a>
-                </div>
-                <div class="shop-card">
-                    <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=400" alt="Beauty Shop">
-                    <h3>Health & Glow</h3>
-                    <p>Cosmetics, skincare & wellness products</p>
-                    <a href="shop_health_glow.html" class="btn-secondary">View Shop</a>
-                </div>
-                <div class="shop-card">
-                    <img src="https://images.unsplash.com/photo-1515488764276-beab7607c1e6?w=400" alt="Toy Shop">
-                    <h3>Toy Planet</h3>
-                    <p>Toys, games & kids entertainment</p>
-                    <a href="shop_toy_planet.html" class="btn-secondary">View Shop</a>
-                </div>
-            </div>
-        </section>
     </main>
 
     <footer class="footer">
         <div style="max-width: 1400px; margin: 0 auto;">
             <p>© 2025 SuperMall — Your Smart Shopping Destination</p>
-            <p style="margin-top: 10px; font-size: 0.9rem;">Built with ❤️ for seamless shopping experience</p>
-        </div>
-    </footer>
-
-    <script src="static/js/auth.js"></script>
-    <script src="static/js/api.js"></script>
-    <script src="static/js/cart.js"></script>
-    <script>
-        function updateAuthUI() {
-            authService.updateUI();
-        }
-        
-        function handleLogout() {
-            authService.logout();
-        }
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            updateAuthUI();
-            if (typeof updateCartBadge === 'function') updateCartBadge();
-            if (typeof updateWishlistBadge === 'function') updateWishlistBadge();
-        });
-    </script>
-</body>
-</html>em; opacity: 0.8;">Discover • Compare • Shop</p>
-        </div>
-    </footer>
-
-    <script src="static/js/api.js"></script>
-    <script src="static/js/auth.js"></script>
-    <script src="static/js/cart.js"></script>
-    <script src="static/js/wishlist.js"></script>
-    <script src="static/js/ui.js"></script>
-    <script>
-        function handleLogout() {
-            if (confirm('Are you sure you want to logout?')) {
-                authService.logout();
-            }
-        }
-    </script>
-</body>
-</html>
+            <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">Discover • Compare • Shop</p>
         </div>
     </footer>
 
     <script src="static/js/config.js"></script>
+    <script src="static/js/api.js"></script>
     <script src="static/js/auth.js"></script>
-    <script src="static/js/cart.js"></script>
+    <script src="static/js/global-cart.js"></script>
+    <script src="static/js/enhanced-cart.js"></script>
     <script src="static/js/wishlist.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Wait for auth service to initialize properly
+            await authService.init();
+            
             const user = authService.getCurrentUser();
             
             if (user) {
                 document.getElementById('loginBtn').style.display = 'none';
                 document.getElementById('userMenu').style.display = 'block';
-                document.getElementById('profileBtn').textContent = user.name;
-                document.getElementById('userName').textContent = user.name;
+                document.getElementById('profileBtn').textContent = user.username;
+                document.getElementById('userName').textContent = user.username;
                 document.getElementById('userEmail').textContent = user.email;
-                document.getElementById('userRole').textContent = user.role.toUpperCase();
+                document.getElementById('userRole').textContent = user.role?.toUpperCase() || 'CUSTOMER';
                 
                 const dashboardLink = document.getElementById('dashboardLink');
                 if (user.role === 'admin') {
@@ -220,20 +145,27 @@
                 });
             }
             
-            if (user && typeof cartManager !== 'undefined') {
-                cartManager.handlePendingCartItem();
+            if (user && typeof enhancedCartManager !== 'undefined' && enhancedCartManager) {
+                await enhancedCartManager.handlePendingCartItem();
+                await enhancedCartManager.loadCart();
             }
             
-            // Initialize badges
-            if (typeof cartManager !== 'undefined') {
-                cartManager.updateCartBadge();
-            }
-            if (typeof wishlistManager !== 'undefined') {
-                wishlistManager.updateWishlistBadge();
-            }
+            // Initialize badges after managers are ready
+            setTimeout(() => {
+                if (typeof enhancedCartManager !== 'undefined' && enhancedCartManager) {
+                    enhancedCartManager.updateCartBadge();
+                }
+                if (typeof enhancedWishlistManager !== 'undefined' && enhancedWishlistManager) {
+                    enhancedWishlistManager.updateWishlistBadge();
+                }
+            }, 600);
         });
-
-      
+        
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                authService.logout();
+            }
+        }
     </script>
 </body>
 </html>

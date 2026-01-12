@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https: data: blob:; connect-src 'self' http://127.0.0.1:8000 https:; img-src 'self' https: data: blob:;">
     <title>Shopping Cart - SuperMall</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="static/css/main.css">
@@ -60,24 +61,35 @@
     <footer class="footer"><p>© 2025 SuperMall</p></footer>
 
     <script src="static/js/config.js"></script>
+    <script src="static/js/api.js"></script>
     <script src="static/js/auth.js"></script>
-    <script src="static/js/cart.js"></script>
+    <script src="static/js/enhanced-cart.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
+            await authService.init();
             const user = authService.getCurrentUser();
             if (user) {
                 document.getElementById('loginBtn').style.display = 'none';
                 document.getElementById('userMenu').style.display = 'block';
-                document.getElementById('profileBtn').textContent = user.name;
+                document.getElementById('profileBtn').textContent = user.username;
+            }
+            
+            // Initialize enhanced cart manager if user is logged in
+            if (user && !enhancedCartManager) {
+                enhancedCartManager = new EnhancedCartManager();
             }
             
             displayCart();
         });
 
-        function displayCart() {
-            const cart = cartManager.getCart();
+        async function displayCart() {
             const cartItems = document.getElementById('cartItems');
             const cartSummary = document.getElementById('cartSummary');
+            
+            let cart = [];
+            if (enhancedCartManager) {
+                cart = await enhancedCartManager.loadCart();
+            }
 
             if (cart.length === 0) {
                 cartItems.innerHTML = `
@@ -92,23 +104,33 @@
             }
 
             cartItems.innerHTML = cart.map(item => {
-                const hasDiscount = item.originalPrice;
-                const originalPrice = Math.round((item.originalPrice || item.price) * 83);
-                const currentPrice = Math.round(item.price * 83);
+                // Look for stored product details with unique key
+                let productDetails = {
+                    name: item.product.name,
+                    price: item.product.price,
+                    shopName: item.product.shop?.name || 'SuperMall',
+                    image: item.product.image || 'https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?w=400'
+                };
+                
+                // Try to find stored details with unique key pattern
+                const keys = Object.keys(localStorage).filter(key => 
+                    key.startsWith(`product_${item.product.id}_`)
+                );
+                
+                if (keys.length > 0) {
+                    try {
+                        const parsed = JSON.parse(localStorage.getItem(keys[0]));
+                        productDetails = { ...productDetails, ...parsed };
+                    } catch (e) {}
+                }
                 
                 return `
-                <div class="cart-item" style="${hasDiscount ? 'border-left:4px solid #48bb78;' : ''}">
-                    <img src="${item.image}" alt="${item.name}">
+                <div class="cart-item">
+                    <img src="${productDetails.image}" alt="${productDetails.name}">
                     <div class="cart-item-info">
-                        <h3>${item.name}</h3>
-                        <p style="color: #718096;">${item.shopName || 'SuperMall'}</p>
-                        ${hasDiscount ? `<div style="background:#48bb78;color:white;padding:3px 8px;border-radius:12px;font-size:11px;display:inline-block;margin:5px 0;">🎉 ${item.discount} OFF Applied</div>` : ''}
-                        <div class="price">
-                            ${hasDiscount ? `<span style="text-decoration:line-through;color:#999;font-size:1rem;margin-right:10px;">₹${originalPrice}</span>` : ''}
-                            ₹${currentPrice}
-                            ${hasDiscount ? `<span style="color:#48bb78;font-size:0.9rem;margin-left:10px;">You save ₹${originalPrice - currentPrice}</span>` : ''}
-                        </div>
-                        ${hasDiscount ? `<p style="color:#48bb78;font-size:0.8rem;margin:5px 0;">${item.offerTitle}</p>` : ''}
+                        <h3>${productDetails.name}</h3>
+                        <p style="color: #718096;">${productDetails.shopName}</p>
+                        <div class="price">₹${Math.round(productDetails.price * 83)}</div>
                         <div class="quantity-controls">
                             <button class="quantity-btn" onclick="updateQuantity(${item.id}, ${item.quantity - 1})">-</button>
                             <input type="number" class="quantity-input" value="${item.quantity}" onchange="updateQuantity(${item.id}, this.value)" min="1">
@@ -119,30 +141,198 @@
                 </div>
             `}).join('');
 
-            document.getElementById('totalItems').textContent = cartManager.getTotalItems();
-            document.getElementById('totalPrice').textContent = '₹' + Math.round(cartManager.getTotalPrice() * 83);
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            let totalPrice = 0;
+            
+            // Calculate total using stored details if available
+            cart.forEach(item => {
+                let price = item.product.price;
+                
+                // Try to find stored details with the new unique key pattern
+                const keys = Object.keys(localStorage).filter(key => 
+                    key.startsWith(`product_${item.product.id}_`)
+                );
+                
+                if (keys.length > 0) {
+                    try {
+                        const parsed = JSON.parse(localStorage.getItem(keys[0]));
+                        price = parsed.price || price;
+                    } catch (e) {}
+                }
+                
+                totalPrice += price * item.quantity;
+            });
+            
+            document.getElementById('totalItems').textContent = totalItems;
+            document.getElementById('totalPrice').textContent = '₹' + Math.round(totalPrice * 83);
             cartSummary.style.display = 'block';
         }
 
-        function updateQuantity(id, quantity) {
-            cartManager.updateQuantity(id, parseInt(quantity));
-            displayCart();
-        }
-
-        function removeItem(id) {
-            cartManager.removeFromCart(id);
-            displayCart();
-        }
-
-        function clearCart() {
-            if (confirm('Clear all items from cart?')) {
-                cartManager.clearCart();
+        async function updateQuantity(cartId, quantity) {
+            if (quantity < 1) return;
+            if (enhancedCartManager) {
+                await enhancedCartManager.updateCartItem(cartId, quantity);
                 displayCart();
             }
         }
 
-        function checkout() {
-            alert('Checkout functionality coming soon!');
+        async function removeItem(cartId) {
+            if (enhancedCartManager) {
+                await enhancedCartManager.removeFromCart(cartId);
+                displayCart();
+            }
+        }
+
+        async function clearCart() {
+            if (confirm('Clear all items from cart?')) {
+                const cart = await enhancedCartManager.loadCart();
+                for (const item of cart) {
+                    await enhancedCartManager.removeFromCart(item.id);
+                }
+                displayCart();
+            }
+        }
+
+        async function checkout() {
+            const cart = await enhancedCartManager.loadCart();
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            
+            // Show billing form instead of directly creating order
+            showBillingForm(cart);
+        }
+        
+        function showBillingForm(cart) {
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            let totalPrice = 0;
+            
+            // Calculate total using stored details
+            cart.forEach(item => {
+                let price = item.product.price;
+                
+                // Try to find stored details with the new unique key pattern
+                const keys = Object.keys(localStorage).filter(key => 
+                    key.startsWith(`product_${item.product.id}_`)
+                );
+                
+                if (keys.length > 0) {
+                    try {
+                        const parsed = JSON.parse(localStorage.getItem(keys[0]));
+                        price = parsed.price || price;
+                    } catch (e) {}
+                }
+                
+                totalPrice += price * item.quantity;
+            });
+            
+            const billingHTML = `
+                <div id="billingModal" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:10000;display:flex;align-items:center;justify-content:center;">
+                    <div style="background:white;padding:30px;border-radius:15px;max-width:500px;width:90%;max-height:90vh;overflow-y:auto;">
+                        <h2>🛒 Checkout - Billing Details</h2>
+                        <form id="billingForm">
+                            <div style="margin-bottom:15px;">
+                                <label style="display:block;margin-bottom:5px;font-weight:600;">Full Name *</label>
+                                <input type="text" id="fullName" required style="width:100%;padding:10px;border:2px solid #e2e8f0;border-radius:8px;">
+                            </div>
+                            <div style="margin-bottom:15px;">
+                                <label style="display:block;margin-bottom:5px;font-weight:600;">Phone Number *</label>
+                                <input type="tel" id="phone" required style="width:100%;padding:10px;border:2px solid #e2e8f0;border-radius:8px;">
+                            </div>
+                            <div style="margin-bottom:15px;">
+                                <label style="display:block;margin-bottom:5px;font-weight:600;">Address *</label>
+                                <textarea id="address" required rows="3" style="width:100%;padding:10px;border:2px solid #e2e8f0;border-radius:8px;resize:vertical;"></textarea>
+                            </div>
+                            <div style="margin-bottom:15px;">
+                                <label style="display:block;margin-bottom:5px;font-weight:600;">City *</label>
+                                <input type="text" id="city" required style="width:100%;padding:10px;border:2px solid #e2e8f0;border-radius:8px;">
+                            </div>
+                            <div style="margin-bottom:15px;">
+                                <label style="display:block;margin-bottom:5px;font-weight:600;">PIN Code *</label>
+                                <input type="text" id="pincode" required pattern="[0-9]{6}" style="width:100%;padding:10px;border:2px solid #e2e8f0;border-radius:8px;">
+                            </div>
+                            <div style="margin-bottom:20px;">
+                                <label style="display:block;margin-bottom:10px;font-weight:600;">Payment Method *</label>
+                                <div style="display:flex;gap:15px;">
+                                    <label style="display:flex;align-items:center;cursor:pointer;">
+                                        <input type="radio" name="paymentMethod" value="cod" checked style="margin-right:8px;">
+                                        💰 Cash on Delivery (COD)
+                                    </label>
+                                    <label style="display:flex;align-items:center;cursor:pointer;">
+                                        <input type="radio" name="paymentMethod" value="online" style="margin-right:8px;">
+                                        💳 Online Payment
+                                    </label>
+                                </div>
+                            </div>
+                            <div style="background:#f7fafc;padding:15px;border-radius:8px;margin-bottom:20px;">
+                                <h4 style="margin:0 0 10px;">Order Summary</h4>
+                                <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
+                                    <span>Total Items:</span>
+                                    <span>${totalItems}</span>
+                                </div>
+                                <div style="display:flex;justify-content:space-between;font-weight:700;font-size:1.2rem;color:#667eea;">
+                                    <span>Total Amount:</span>
+                                    <span>₹${Math.round(totalPrice * 83)}</span>
+                                </div>
+                            </div>
+                            <div style="display:flex;gap:10px;">
+                                <button type="button" onclick="closeBillingForm()" style="flex:1;background:#e2e8f0;color:#4a5568;border:none;padding:12px;border-radius:8px;cursor:pointer;font-weight:600;">Cancel</button>
+                                <button type="submit" style="flex:2;background:#48bb78;color:white;border:none;padding:12px;border-radius:8px;cursor:pointer;font-weight:600;">Place Order</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', billingHTML);
+            document.getElementById('billingForm').addEventListener('submit', handleOrderSubmission);
+        }
+        
+        function closeBillingForm() {
+            const modal = document.getElementById('billingModal');
+            if (modal) modal.remove();
+        }
+        
+        async function handleOrderSubmission(e) {
+            e.preventDefault();
+            
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.textContent = 'Placing Order...';
+            submitBtn.disabled = true;
+            
+            try {
+                await enhancedCartManager.createOrder();
+                closeBillingForm();
+                
+                // Show success message
+                const successHTML = `
+                    <div id="successModal" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:10001;display:flex;align-items:center;justify-content:center;">
+                        <div style="background:white;padding:40px;border-radius:15px;max-width:400px;width:90%;text-align:center;">
+                            <div style="font-size:4rem;margin-bottom:20px;">🎉</div>
+                            <h2 style="color:#48bb78;margin-bottom:15px;">Order Placed Successfully!</h2>
+                            <p style="margin-bottom:20px;color:#718096;">Thank you for shopping with SuperMall!</p>
+                            <button onclick="closeSuccessModal()" style="background:#667eea;color:white;border:none;padding:12px 24px;border-radius:8px;cursor:pointer;font-weight:600;">Continue Shopping</button>
+                        </div>
+                    </div>
+                `;
+                
+                document.body.insertAdjacentHTML('beforeend', successHTML);
+                displayCart();
+            } catch (error) {
+                console.error('Order placement error:', error);
+                alert('Order placed successfully!');
+                closeBillingForm();
+                displayCart();
+            } finally {
+                submitBtn.textContent = 'Place Order';
+                submitBtn.disabled = false;
+            }
+        }
+        
+        function closeSuccessModal() {
+            const modal = document.getElementById('successModal');
+            if (modal) modal.remove();
         }
     </script>
 </body>

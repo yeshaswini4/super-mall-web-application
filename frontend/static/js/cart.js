@@ -1,56 +1,100 @@
 class CartManager {
     constructor() {
+        this.cart = [];
         this.loadCart();
         this.updateCartBadge();
     }
 
-    loadCart() {
-        const saved = localStorage.getItem('cart');
-        this.cart = saved ? JSON.parse(saved) : [];
-    }
-
-    saveCart() {
-        localStorage.setItem('cart', JSON.stringify(this.cart));
+    async loadCart() {
+        try {
+            if (authService.getCurrentUser()) {
+                this.cart = await apiService.getCart();
+            } else {
+                const saved = localStorage.getItem('cart');
+                this.cart = saved ? JSON.parse(saved) : [];
+            }
+        } catch (error) {
+            console.error('Failed to load cart:', error);
+            const saved = localStorage.getItem('cart');
+            this.cart = saved ? JSON.parse(saved) : [];
+        }
         this.updateCartBadge();
     }
 
-    addToCart(product) {
-        // Check if user is authenticated
-        if (!authService.isAuthenticated()) {
-            // Store the product in session for after login
+    async saveCart() {
+        try {
+            if (authService.getCurrentUser()) {
+                // Cart is managed by backend, no need to save locally
+                await this.loadCart(); // Refresh from backend
+            } else {
+                localStorage.setItem('cart', JSON.stringify(this.cart));
+            }
+        } catch (error) {
+            console.error('Failed to save cart:', error);
+            localStorage.setItem('cart', JSON.stringify(this.cart));
+        }
+        this.updateCartBadge();
+    }
+
+    async addToCart(product) {
+        // Wait for auth service to initialize
+        if (!authService.getCurrentUser()) {
             sessionStorage.setItem('pendingCartItem', JSON.stringify(product));
-            // Redirect to login
             window.location.href = 'login.html?redirect=cart';
             return;
         }
 
-        // Apply discount if available
-        const discountedProduct = this.applyDiscount(product);
-        
-        const existing = this.cart.find(item => item.id === discountedProduct.id);
-        if (existing) {
-            existing.quantity += 1;
-        } else {
-            this.cart.push({...discountedProduct, quantity: 1});
-        }
-        this.saveCart();
-        alert(`${discountedProduct.name} added to cart!`);
-    }
-
-    removeFromCart(productId) {
-        this.cart = this.cart.filter(item => item.id !== productId);
-        this.saveCart();
-    }
-
-    updateQuantity(productId, quantity) {
-        const item = this.cart.find(item => item.id === productId);
-        if (item) {
-            item.quantity = quantity;
-            if (quantity <= 0) {
-                this.removeFromCart(productId);
+        try {
+            await apiService.addToCart(product.id, 1);
+            await this.loadCart();
+            alert(`${product.name} added to cart!`);
+        } catch (error) {
+            console.error('Failed to add to cart:', error);
+            // Fallback to local storage
+            const discountedProduct = this.applyDiscount(product);
+            const existing = this.cart.find(item => item.id === discountedProduct.id);
+            if (existing) {
+                existing.quantity += 1;
             } else {
+                this.cart.push({...discountedProduct, quantity: 1});
+            }
+            this.saveCart();
+            alert(`${discountedProduct.name} added to cart!`);
+        }
+    }
+
+    async removeFromCart(cartId) {
+        try {
+            if (authService.getCurrentUser()) {
+                await apiService.removeFromCart(cartId);
+                await this.loadCart();
+            } else {
+                this.cart = this.cart.filter(item => item.id !== cartId);
                 this.saveCart();
             }
+        } catch (error) {
+            console.error('Failed to remove from cart:', error);
+        }
+    }
+
+    async updateQuantity(cartId, quantity) {
+        try {
+            if (authService.getCurrentUser()) {
+                await apiService.updateCartItem(cartId, quantity);
+                await this.loadCart();
+            } else {
+                const item = this.cart.find(item => item.id === cartId);
+                if (item) {
+                    item.quantity = quantity;
+                    if (quantity <= 0) {
+                        this.removeFromCart(cartId);
+                    } else {
+                        this.saveCart();
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Failed to update cart quantity:', error);
         }
     }
 
@@ -116,24 +160,12 @@ class CartManager {
         ];
     }
 
-    // Handle pending cart item after login
-    handlePendingCartItem() {
+    async handlePendingCartItem() {
         const pendingItem = sessionStorage.getItem('pendingCartItem');
         if (pendingItem) {
             const product = JSON.parse(pendingItem);
-            sessionStorage.removeItem('pendingCartItem'); // Remove first to prevent recursion
-            
-            // Apply discount if available
-            const discountedProduct = this.applyDiscount(product);
-            
-            const existing = this.cart.find(item => item.id === discountedProduct.id);
-            if (existing) {
-                existing.quantity += 1;
-            } else {
-                this.cart.push({...discountedProduct, quantity: 1});
-            }
-            this.saveCart();
-            alert(`${discountedProduct.name} added to cart!`);
+            sessionStorage.removeItem('pendingCartItem');
+            await this.addToCart(product);
         }
     }
 }

@@ -14,7 +14,7 @@
         .selector-box { padding: 20px; border: 2px solid #e2e8f0; border-radius: 8px; }
         .selector-box h3 { margin-bottom: 15px; color: #667eea; }
         .selector-box select { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 1rem; }
-        .btn-compare { background: #667eea; color: white; padding: 12px 30px; border: none; border-radius: 6px; cursor: pointer; font-size: 1rem; margin-top: 20px; }
+        .btn-compare { background: #667eea; color: white; padding: 12px 30px; border: none; border-radius: 6px; cursor: pointer; font-size: 1rem; margin: 10px 5px; }
         .btn-compare:hover { background: #5568d3; }
         .comparison-table { width: 100%; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-top: 30px; display: none; }
         .comparison-table.active { display: table; }
@@ -23,6 +23,10 @@
         .comparison-table tr:nth-child(even) { background: #f7fafc; }
         .product-img { width: 150px; height: 150px; object-fit: cover; border-radius: 8px; }
         .price-cell { font-size: 1.5rem; font-weight: 700; color: #667eea; }
+        .category-btn { background: #f7fafc; border: 2px solid #e2e8f0; padding: 8px 16px; border-radius: 20px; cursor: pointer; transition: all 0.3s; margin: 5px; }
+        .category-btn:hover, .category-btn.active { background: #667eea; color: white; border-color: #667eea; }
+        .quick-categories { margin: 30px 0; }
+        .quick-categories h3 { margin-bottom: 15px; }
     </style>
 </head>
 <body>
@@ -31,7 +35,6 @@
         <div class="nav-right">
             <a href="index.html">Home</a>
             <a href="shop_list.html">Shops</a>
-            <a href="floors.html">Floors</a>
             <a href="offers.html">Offers</a>
             <a href="compare.html">Compare</a>
             <a href="login.html" class="btn-primary">Login</a>
@@ -40,7 +43,19 @@
 
     <div class="compare-container">
         <h1>🔍 Compare Products</h1>
-        <p>Select two products to compare features and prices</p>
+        <p>Select products to compare features, prices, and find the best deals</p>
+
+        <!-- Quick Compare Categories -->
+        <div class="quick-categories">
+            <h3>Quick Compare by Category:</h3>
+            <div>
+                <button class="category-btn" onclick="filterByCategory('electronics')">📱 Electronics</button>
+                <button class="category-btn" onclick="filterByCategory('fashion')">👗 Fashion</button>
+                <button class="category-btn" onclick="filterByCategory('home')">🏠 Home</button>
+                <button class="category-btn" onclick="filterByCategory('grocery')">🛒 Grocery</button>
+                <button class="category-btn" onclick="filterByCategory('')">🔄 All Products</button>
+            </div>
+        </div>
 
         <div class="selector-section">
             <div class="selector-grid">
@@ -57,8 +72,10 @@
                     </select>
                 </div>
             </div>
-            <div style="text-align: center;">
-                <button class="btn-compare" onclick="compareProducts()">Compare Now</button>
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn-compare" onclick="compareProducts()">🔍 Compare Now</button>
+                <button class="btn-compare" onclick="clearComparison()" style="background: #e53e3e;">🗑️ Clear</button>
+                <button class="btn-compare" onclick="shareComparison()" style="background: #38a169;">📤 Share</button>
             </div>
         </div>
 
@@ -80,14 +97,50 @@
     <script>
         const products = window.MOCK_PRODUCTS || [];
         
-        // Populate dropdowns
-        const selectA = document.getElementById('productA');
-        const selectB = document.getElementById('productB');
+        function populateDropdowns(filteredProducts = products) {
+            const selectA = document.getElementById('productA');
+            const selectB = document.getElementById('productB');
+            
+            selectA.innerHTML = '<option value="">-- Select Product --</option>';
+            selectB.innerHTML = '<option value="">-- Select Product --</option>';
+            
+            filteredProducts.forEach(p => {
+                const option = `<option value="${p.id}">${p.name} - ₹${Math.round(p.price * 83)}</option>`;
+                selectA.innerHTML += option;
+                selectB.innerHTML += option;
+            });
+        }
         
-        products.forEach(p => {
-            selectA.innerHTML += `<option value="${p.id}">${p.name} - ₹${Math.round(p.price * 83)}</option>`;
-            selectB.innerHTML += `<option value="${p.id}">${p.name} - ₹${Math.round(p.price * 83)}</option>`;
-        });
+        populateDropdowns();
+        
+        function filterByCategory(category) {
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const filtered = category ? products.filter(p => p.category.toLowerCase().includes(category)) : products;
+            populateDropdowns(filtered);
+        }
+        
+        function clearComparison() {
+            document.getElementById('productA').value = '';
+            document.getElementById('productB').value = '';
+            document.getElementById('comparisonTable').classList.remove('active');
+        }
+        
+        function shareComparison() {
+            const idA = document.getElementById('productA').value;
+            const idB = document.getElementById('productB').value;
+            
+            if (!idA || !idB) {
+                alert('Please select products to compare first');
+                return;
+            }
+            
+            const url = `${window.location.origin}${window.location.pathname}?compare=${idA},${idB}`;
+            navigator.clipboard.writeText(url).then(() => {
+                alert('Comparison link copied to clipboard!');
+            });
+        }
 
         function compareProducts() {
             const idA = parseInt(document.getElementById('productA').value);
@@ -116,26 +169,11 @@
                     <td><img src="${prodA.image}" class="product-img" alt="${prodA.name}"></td>
                     <td><img src="${prodB.image}" class="product-img" alt="${prodB.name}"></td>
                 </tr>
-                ${prodA.discount || prodB.discount ? `<tr>
-                    <td><strong>Discount</strong></td>
-                    <td style="color:#ff6b6b;font-weight:700;font-size:1.2rem;">${prodA.discount ? prodA.discount + '% OFF 🔥' : 'No Discount'}</td>
-                    <td style="color:#ff6b6b;font-weight:700;font-size:1.2rem;">${prodB.discount ? prodB.discount + '% OFF 🔥' : 'No Discount'}</td>
-                </tr>` : ''}
-                ${prodA.originalPrice || prodB.originalPrice ? `<tr>
-                    <td><strong>Original Price</strong></td>
-                    <td style="text-decoration:line-through;color:#999;">₹${Math.round((prodA.originalPrice || prodA.price) * 83)}</td>
-                    <td style="text-decoration:line-through;color:#999;">₹${Math.round((prodB.originalPrice || prodB.price) * 83)}</td>
-                </tr>` : ''}
                 <tr>
-                    <td><strong>Sale Price</strong></td>
-                    <td class="price-cell">₹${Math.round((prodA.salePrice || prodA.price) * 83)}</td>
-                    <td class="price-cell">₹${Math.round((prodB.salePrice || prodB.price) * 83)}</td>
+                    <td><strong>Price</strong></td>
+                    <td class="price-cell">₹${Math.round(prodA.price * 83)}</td>
+                    <td class="price-cell">₹${Math.round(prodB.price * 83)}</td>
                 </tr>
-                ${prodA.discount || prodB.discount ? `<tr>
-                    <td><strong>You Save</strong></td>
-                    <td style="color:#38a169;font-weight:700;font-size:1.1rem;">${prodA.discount ? '₹' + Math.round((prodA.originalPrice - prodA.salePrice) * 83) : '₹0'}</td>
-                    <td style="color:#38a169;font-weight:700;font-size:1.1rem;">${prodB.discount ? '₹' + Math.round((prodB.originalPrice - prodB.salePrice) * 83) : '₹0'}</td>
-                </tr>` : ''}
                 <tr>
                     <td><strong>Category</strong></td>
                     <td>${prodA.category}</td>
@@ -148,13 +186,13 @@
                 </tr>
                 <tr>
                     <td><strong>Features</strong></td>
-                    <td>${prodA.features.map(f => `✓ ${f}`).join('<br>')}</td>
-                    <td>${prodB.features.map(f => `✓ ${f}`).join('<br>')}</td>
+                    <td>${prodA.features ? prodA.features.map(f => `✓ ${f}`).join('<br>') : 'No features listed'}</td>
+                    <td>${prodB.features ? prodB.features.map(f => `✓ ${f}`).join('<br>') : 'No features listed'}</td>
                 </tr>
                 <tr>
                     <td><strong>Best Deal</strong></td>
                     <td colspan="2" style="text-align:center;font-size:1.2rem;font-weight:700;color:#667eea;">
-                        ${(prodA.salePrice || prodA.price) < (prodB.salePrice || prodB.price) ? prodA.name + ' is cheaper! 🏆' : prodB.name + ' is cheaper! 🏆'}
+                        ${prodA.price < prodB.price ? prodA.name + ' is cheaper! 🏆' : prodB.name + ' is cheaper! 🏆'}
                     </td>
                 </tr>
             `;

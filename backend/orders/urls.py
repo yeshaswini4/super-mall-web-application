@@ -10,5 +10,7 @@ router.register(r'orders', views.OrderViewSet, basename='orders')
 urlpatterns = [
     path('add-to-cart/', views.add_to_cart, name='add_to_cart'),
     path('add-to-wishlist/', views.add_to_wishlist, name='add_to_wishlist'),
+    path('create-order/', views.create_order_from_cart, name='create_order'),
+    path('order-summary/', views.order_summary, name='order_summary'),
     path('', include(router.urls)),
 ]

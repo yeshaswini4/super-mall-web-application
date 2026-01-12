@@ -9,10 +9,11 @@ class AuthService {
         try {
             const user = await apiService.getProfile();
             this.currentUser = user;
+            this.updateUI();
         } catch (error) {
             this.currentUser = null;
+            this.updateUI();
         }
-        this.updateUI();
     }
 
     async login(emailOrUsername, password) {
@@ -107,6 +108,27 @@ class AuthService {
                 dropdown.style.display = 'none';
             }
         });
+    }
+
+    getCurrentUser() {
+        return this.currentUser;
+    }
+
+    getUserRole() {
+        return this.currentUser?.role || 'customer';
+    }
+
+    hasRole(role) {
+        return this.getUserRole() === role;
+    }
+
+    requireRole(role) {
+        if (!this.isAuthenticated() || !this.hasRole(role)) {
+            alert('Access denied. Insufficient permissions.');
+            window.location.href = 'index.html';
+            return false;
+        }
+        return true;
     }
 }
 

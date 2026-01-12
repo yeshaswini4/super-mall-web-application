@@ -50,8 +50,12 @@
                 <div class="product-price">₹999</div>
                 <p style="color: #666; font-size: 0.9rem;">Variety pack of 10 cards</p>
                 <div class="product-buttons">
-                    <button class="btn-cart" onclick="addToCart('Premium Gift Cards', 999)" style="flex:1;">🛒 Cart</button>
-                    <button class="btn-wishlist" onclick="addToWishlist('Premium Gift Cards', 999)" style="flex:1;">❤️ Wish</button>
+                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+                        <label style="font-weight:600;">Qty:</label>
+                        <input type="number" id="qty-gift-cards" value="1" min="1" max="10" style="width:60px;padding:5px;border:1px solid #e2e8f0;border-radius:4px;text-align:center;">
+                    </div>
+                    <button class="btn-cart" onclick="addToCart('Premium Gift Cards', 999, 'Archies Gift Store', 'toys', parseInt(document.getElementById('qty-gift-cards').value))" style="flex:1;">🛒 Cart</button>
+                    <button class="btn-wishlist" onclick="addToWishlist('Premium Gift Cards', 999, 'Archies Gift Store', 'toys')" style="flex:1;">❤️ Wish</button>
                 </div>
             </div>
             <div class="product-card">
@@ -60,8 +64,12 @@
                 <div class="product-price">₹1,499</div>
                 <p style="color: #666; font-size: 0.9rem;">Pens, notebooks, accessories</p>
                 <div class="product-buttons">
-                    <button class="btn-cart" onclick="addToCart('Complete Stationery Set', 1499)" style="flex:1;">🛒 Cart</button>
-                    <button class="btn-wishlist" onclick="addToWishlist('Complete Stationery Set', 1499)" style="flex:1;">❤️ Wish</button>
+                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+                        <label style="font-weight:600;">Qty:</label>
+                        <input type="number" id="qty-stationery" value="1" min="1" max="10" style="width:60px;padding:5px;border:1px solid #e2e8f0;border-radius:4px;text-align:center;">
+                    </div>
+                    <button class="btn-cart" onclick="addToCart('Complete Stationery Set', 1499, 'Archies Gift Store', 'toys', parseInt(document.getElementById('qty-stationery').value))" style="flex:1;">🛒 Cart</button>
+                    <button class="btn-wishlist" onclick="addToWishlist('Complete Stationery Set', 1499, 'Archies Gift Store', 'toys')" style="flex:1;">❤️ Wish</button>
                 </div>
             </div>
             <div class="product-card">
@@ -70,8 +78,12 @@
                 <div class="product-price">₹799</div>
                 <p style="color: #666; font-size: 0.9rem;">Set of 3 elegant frames</p>
                 <div class="product-buttons">
-                    <button class="btn-cart" onclick="addToCart('Designer Photo Frames', 799)" style="flex:1;">🛒 Cart</button>
-                    <button class="btn-wishlist" onclick="addToWishlist('Designer Photo Frames', 799)" style="flex:1;">❤️ Wish</button>
+                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+                        <label style="font-weight:600;">Qty:</label>
+                        <input type="number" id="qty-frames" value="1" min="1" max="10" style="width:60px;padding:5px;border:1px solid #e2e8f0;border-radius:4px;text-align:center;">
+                    </div>
+                    <button class="btn-cart" onclick="addToCart('Designer Photo Frames', 799, 'Archies Gift Store', 'toys', parseInt(document.getElementById('qty-frames').value))" style="flex:1;">🛒 Cart</button>
+                    <button class="btn-wishlist" onclick="addToWishlist('Designer Photo Frames', 799, 'Archies Gift Store', 'toys')" style="flex:1;">❤️ Wish</button>
                 </div>
             </div>
             <div class="product-card">
@@ -80,8 +92,12 @@
                 <div class="product-price">₹2,499</div>
                 <p style="color: #666; font-size: 0.9rem;">Curated gift collection</p>
                 <div class="product-buttons">
-                    <button class="btn-cart" onclick="addToCart('Special Gift Hamper', 2499)" style="flex:1;">🛒 Cart</button>
-                    <button class="btn-wishlist" onclick="addToWishlist('Special Gift Hamper', 2499)" style="flex:1;">❤️ Wish</button>
+                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+                        <label style="font-weight:600;">Qty:</label>
+                        <input type="number" id="qty-hamper" value="1" min="1" max="10" style="width:60px;padding:5px;border:1px solid #e2e8f0;border-radius:4px;text-align:center;">
+                    </div>
+                    <button class="btn-cart" onclick="addToCart('Special Gift Hamper', 2499, 'Archies Gift Store', 'toys', parseInt(document.getElementById('qty-hamper').value))" style="flex:1;">🛒 Cart</button>
+                    <button class="btn-wishlist" onclick="addToWishlist('Special Gift Hamper', 2499, 'Archies Gift Store', 'toys')" style="flex:1;">❤️ Wish</button>
                 </div>
             </div>
         </div>
@@ -90,42 +106,9 @@
     <footer class="footer"><p>© 2025 SuperMall</p></footer>
 
     <script src="static/js/config.js"></script>
+    <script src="static/js/api.js"></script>
     <script src="static/js/auth.js"></script>
-    <script src="static/js/cart.js"></script>
-    <script src="static/js/wishlist.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const user = authService.getCurrentUser();
-            if (user) {
-                document.getElementById('loginBtn').style.display = 'none';
-                document.getElementById('userMenu').style.display = 'block';
-                document.getElementById('profileBtn').textContent = user.name;
-            }
-        });
-
-        function addToCart(name, price) {
-            const product = {
-                id: Date.now(),
-                name: name,
-                price: price / 83,
-                shopName: 'Archies Gift Store',
-                category: 'toys',
-                image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=400'
-            };
-            cartManager.addToCart(product);
-        }
-
-        function addToWishlist(name, price) {
-            const product = {
-                id: Date.now() + Math.random(),
-                name: name,
-                price: price / 83,
-                shopName: 'Archies Gift Store',
-                category: 'toys',
-                image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=400'
-            };
-            wishlistManager.addToWishlist(product);
-        }
-    </script>
+    <script src="static/js/enhanced-cart.js"></script>
+    <script src="static/js/universal-shop-fix.js"></script>
 </body>
 </html>
