@@ -7,27 +7,364 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="static/css/main.css">
     <style>
-        body { background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px 0; }
-        .signup-container { background: white; padding: 50px 40px; border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); max-width: 450px; width: 90%; }
-        .signup-container h1 { text-align: center; margin-bottom: 10px; color: #1a202c; }
-        .signup-container p { text-align: center; color: #718096; margin-bottom: 30px; }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: #2d3748; }
-        .form-group input { width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1rem; font-family: 'Poppins', sans-serif; transition: all 0.3s; box-sizing: border-box; }
-        .form-group select { width: 100%; padding: 14px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 1rem; font-family: 'Poppins', sans-serif; transition: all 0.3s; box-sizing: border-box; -webkit-appearance: none; -moz-appearance: none; appearance: none; background-color: white; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><path fill="%23666" d="M6 9L1.5 4.5h9z"/></svg>'); background-repeat: no-repeat; background-position: right 12px center; background-size: 12px; cursor: pointer; }
-        .form-group input:focus, .form-group select:focus { outline: none; border-color: #48bb78; box-shadow: 0 0 0 3px rgba(72,187,120,0.1); }
-        .btn-signup { width: 100%; padding: 14px; background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); color: white; border: none; border-radius: 10px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.3s; margin-top: 10px; }
-        .btn-signup:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(72,187,120,0.4); }
-        .login-link { text-align: center; margin-top: 20px; color: #718096; }
-        .login-link a { color: #48bb78; font-weight: 600; text-decoration: none; }
-        .back-home { text-align: center; margin-top: 15px; }
-        .back-home a { color: #48bb78; text-decoration: none; font-weight: 500; }
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 25%, #fecfef 75%, #ff9a9e 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .floating-item {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.6;
+            animation: floatUp 15s infinite linear;
+        }
+        
+        .floating-item:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .floating-item:nth-child(2) { left: 20%; animation-delay: 2s; }
+        .floating-item:nth-child(3) { left: 30%; animation-delay: 4s; }
+        .floating-item:nth-child(4) { left: 40%; animation-delay: 6s; }
+        .floating-item:nth-child(5) { left: 50%; animation-delay: 8s; }
+        .floating-item:nth-child(6) { left: 60%; animation-delay: 10s; }
+        .floating-item:nth-child(7) { left: 70%; animation-delay: 12s; }
+        .floating-item:nth-child(8) { left: 80%; animation-delay: 14s; }
+        .floating-item:nth-child(9) { left: 90%; animation-delay: 16s; }
+        
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+        
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+        
+        .heart {
+            position: absolute;
+            color: #ff69b4;
+            font-size: 1.5rem;
+            opacity: 0.3;
+            animation: heartFloat 12s infinite linear;
+        }
+        
+        .heart:nth-child(odd) { animation-duration: 18s; }
+        .heart:nth-child(1) { left: 15%; animation-delay: 1s; }
+        .heart:nth-child(2) { left: 25%; animation-delay: 3s; }
+        .heart:nth-child(3) { left: 45%; animation-delay: 5s; }
+        .heart:nth-child(4) { left: 65%; animation-delay: 7s; }
+        .heart:nth-child(5) { left: 85%; animation-delay: 9s; }
+        
+        @keyframes heartFloat {
+            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+            20% { opacity: 0.3; }
+            80% { opacity: 0.3; }
+            100% { transform: translateY(-50px) scale(1.2); opacity: 0; }
+        }
+        
+        .signup-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 45px 40px;
+            box-shadow: 0 25px 50px rgba(255, 105, 180, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.5);
+            width: 100%;
+            max-width: 480px;
+            position: relative;
+            z-index: 10;
+            border: 2px solid rgba(255, 182, 193, 0.4);
+            animation: containerBounce 3s ease-in-out infinite;
+        }
+        
+        @keyframes containerBounce {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-5px) scale(1.02); }
+        }
+        
+        .signup-container::before {
+            content: '🛍️';
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 4rem;
+            background: linear-gradient(45deg, #ff9a9e, #fecfef);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 15px 35px rgba(255, 105, 180, 0.4);
+            animation: iconSpin 4s ease-in-out infinite;
+        }
+        
+        @keyframes iconSpin {
+            0%, 100% { transform: translateX(-50%) rotate(0deg); }
+            50% { transform: translateX(-50%) rotate(10deg); }
+        }
+        
+        .signup-container h1 {
+            text-align: center;
+            background: linear-gradient(45deg, #ff69b4, #ff1493);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 35px 0 15px 0;
+            font-size: 2rem;
+            font-weight: 800;
+            animation: textGlow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes textGlow {
+            0% { filter: drop-shadow(0 0 5px rgba(255, 105, 180, 0.3)); }
+            100% { filter: drop-shadow(0 0 15px rgba(255, 105, 180, 0.6)); }
+        }
+        
+        .signup-container p {
+            text-align: center;
+            color: #8b5a8c;
+            margin-bottom: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        
+        .admin-credentials {
+            background: linear-gradient(135deg, rgba(255, 105, 180, 0.1) 0%, rgba(255, 182, 193, 0.1) 100%);
+            border: 2px solid rgba(255, 105, 180, 0.3);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .admin-credentials::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #8b5a8c;
+            font-size: 0.95rem;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 16px 20px;
+            border: 3px solid #ffc0cb;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background: rgba(255, 240, 245, 0.8);
+            backdrop-filter: blur(10px);
+        }
+        
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #ff69b4;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 0 0 4px rgba(255, 105, 180, 0.2), 0 10px 25px rgba(255, 105, 180, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .btn-signup {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(45deg, #ff69b4, #ff1493, #ff69b4);
+            background-size: 200% 200%;
+            animation: buttonGradient 3s ease infinite;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            box-shadow: 0 8px 25px rgba(255, 105, 180, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        @keyframes buttonGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .btn-signup::before {
+            content: '✨';
+            position: absolute;
+            left: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            transition: left 0.6s ease;
+        }
+        
+        .btn-signup:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(255, 105, 180, 0.6);
+        }
+        
+        .btn-signup:hover::before {
+            left: calc(100% + 10px);
+        }
+        
+        .login-link, .back-home {
+            text-align: center;
+            margin-top: 20px;
+            color: #8b5a8c;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        
+        .login-link a, .back-home a {
+            color: #ff69b4;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .login-link a::after, .back-home a::after {
+            content: '💖';
+            position: absolute;
+            left: -25px;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .login-link a:hover::after, .back-home a:hover::after {
+            opacity: 1;
+            left: -20px;
+        }
+        
+        .login-link a:hover, .back-home a:hover {
+            color: #ff1493;
+            transform: translateY(-2px);
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+        
+        .password-toggle:hover {
+            opacity: 1;
+            transform: translateY(-50%) scale(1.2);
+        }
+        
+        @media (max-width: 768px) {
+            .signup-container {
+                margin: 20px;
+                padding: 35px 25px;
+            }
+            
+            .floating-item, .heart {
+                font-size: 1.5rem;
+            }
+        }
     </style>
 </head>
 <body>
+    <div class="floating-elements">
+        <div class="floating-item">🛍️</div>
+        <div class="floating-item">👗</div>
+        <div class="floating-item">👠</div>
+        <div class="floating-item">💄</div>
+        <div class="floating-item">👜</div>
+        <div class="floating-item">💍</div>
+        <div class="floating-item">🎀</div>
+        <div class="floating-item">🌸</div>
+        <div class="floating-item">✨</div>
+    </div>
+    
+    <div class="hearts">
+        <div class="heart">💖</div>
+        <div class="heart">💕</div>
+        <div class="heart">💗</div>
+        <div class="heart">💝</div>
+        <div class="heart">💖</div>
+    </div>
+    
     <div class="signup-container">
-        <h1>🛒 Create Account</h1>
-        <p>Join SuperMall today</p>
+        <h1>Create Account</h1>
+        <p>Join our cute mall! 💕</p>
+
+        <div class="admin-credentials">
+            <h4 style="margin: 0 0 15px 0; color: #ff69b4; font-size: 1.1rem; font-weight: 700;">📋 Admin Credentials (For Teacher Testing)</h4>
+            <div style="color: #8b5a8c; line-height: 1.6; font-weight: 500;">
+                <strong>Email:</strong> yeshaswini234@gmail.com<br>
+                <strong>Password:</strong> yesh123<br>
+                <strong>Role:</strong> Admin<br>
+                <em style="font-size: 0.9rem; color: #8b5a8c; font-style: italic;">Use these credentials to access admin dashboard</em>
+            </div>
+        </div>
 
         <form id="signupForm" onsubmit="handleSignup(event)">
             <div class="form-group">
@@ -44,7 +381,7 @@
                 <label>Password</label>
                 <div style="position:relative;">
                     <input type="password" id="password" placeholder="Create a password" required minlength="6">
-                    <button type="button" onclick="togglePassword('password')" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:18px;">👁️</button>
+                    <button type="button" onclick="togglePassword('password')" class="password-toggle">👁️</button>
                 </div>
             </div>
 

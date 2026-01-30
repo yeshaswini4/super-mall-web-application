@@ -116,3 +116,14 @@ def customer_stats(request):
         )
     }
     return Response(stats)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def all_users(request):
+    if request.user.role != 'admin':
+        return Response({'error': 'Admin access required'}, status=status.HTTP_403_FORBIDDEN)
+    
+    users = User.objects.all().values(
+        'id', 'username', 'email', 'role', 'is_active', 'date_joined'
+    )
+    return Response(list(users))

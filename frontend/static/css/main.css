@@ -7,7 +7,7 @@
 
 body {
     font-family: "Poppins", sans-serif;
-    background: #f8f9fa;
+    background: #ffffff;
     color: #2d3748;
     line-height: 1.6;
 }
@@ -40,10 +40,11 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 20px rgba(0,0,0,0.1);
     position: sticky;
     top: 0;
     z-index: 1000;
+    border-bottom: 1px solid #e2e8f0;
 }
 
 .nav-left {
@@ -110,7 +111,7 @@ body {
     gap: 60px;
     align-items: center;
     padding: 80px 5%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
     color: white;
     min-height: 500px;
 }
@@ -143,20 +144,21 @@ body {
 
 .btn-primary {
     padding: 14px 32px;
-    background: #ffd700;
-    color: #1a202c;
+    background: #ffffff;
+    color: #3182ce;
     border-radius: 50px;
     text-decoration: none;
     font-weight: 600;
     transition: all 0.3s;
     display: inline-block;
-    box-shadow: 0 4px 15px rgba(255,215,0,0.4);
+    box-shadow: 0 4px 15px rgba(255,255,255,0.3);
+    border: 2px solid #ffffff;
 }
 
 .btn-primary:hover {
-    background: #ffed4e;
+    background: #f7fafc;
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(255,215,0,0.5);
+    box-shadow: 0 6px 20px rgba(255,255,255,0.4);
 }
 
 /* ---------- CATEGORIES ---------- */
@@ -176,10 +178,10 @@ body {
     padding: 40px 30px;
     border-radius: 16px;
     text-align: center;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
     cursor: pointer;
     transition: all 0.3s ease;
-    border: 2px solid transparent;
+    border: 2px solid #f7fafc;
 }
 
 .category-card img {
@@ -198,14 +200,14 @@ body {
 
 .category-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 12px 30px rgba(102,126,234,0.2);
-    border-color: #667eea;
+    box-shadow: 0 12px 30px rgba(65,153,225,0.15);
+    border-color: #4299e1;
 }
 
 /* ---------- SHOPS SECTION ---------- */
 .shops {
     padding: 60px 5%;
-    background: #f8f9fa;
+    background: #f7fafc;
 }
 
 .featured-shops-grid {
@@ -222,9 +224,9 @@ body {
     background: white;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 15px rgba(0,0,0,0.06);
     transition: all 0.3s ease;
-    border: 1px solid #e2e8f0;
+    border: 1px solid #f1f5f9;
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -277,7 +279,7 @@ body {
 }
 
 .shop-btn {
-    background: #667eea;
+    background: #4299e1;
     color: white;
     padding: 10px 25px;
     border-radius: 25px;
@@ -290,14 +292,14 @@ body {
 }
 
 .shop-btn:hover {
-    background: #5568d3;
+    background: #3182ce;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(102,126,234,0.3);
+    box-shadow: 0 4px 12px rgba(65,153,225,0.3);
 }
 
 .btn-secondary {
     padding: 12px 28px;
-    background: #667eea;
+    background: #4299e1;
     color: white;
     text-decoration: none;
     border-radius: 50px;
@@ -308,9 +310,9 @@ body {
 }
 
 .btn-secondary:hover {
-    background: #5568d3;
+    background: #3182ce;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(102,126,234,0.4);
+    box-shadow: 0 4px 12px rgba(65,153,225,0.4);
 }
 
 .shop-card:hover {
@@ -341,12 +343,12 @@ body {
 
 .filters select:focus {
     outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(65,153,225,0.1);
 }
 
 .filters select:hover {
-    border-color: #667eea;
+    border-color: #4299e1;
 }
 
 

@@ -5,13 +5,27 @@ class AuthService {
     }
 
     async init() {
+        // Try to get user from localStorage first
+        const storedUser = localStorage.getItem('currentUser');
+        if (storedUser) {
+            try {
+                this.currentUser = JSON.parse(storedUser);
+                this.updateUI();
+                return;
+            } catch (error) {
+                localStorage.removeItem('currentUser');
+            }
+        }
+        
         // Try to get current user profile if session exists
         try {
             const user = await apiService.getProfile();
             this.currentUser = user;
+            localStorage.setItem('currentUser', JSON.stringify(user));
             this.updateUI();
         } catch (error) {
             this.currentUser = null;
+            localStorage.removeItem('currentUser');
             this.updateUI();
         }
     }
@@ -19,9 +33,15 @@ class AuthService {
     async login(emailOrUsername, password) {
         try {
             const response = await apiService.login(emailOrUsername, password);
+            console.log('Login response:', response); // Debug log
+            
             // Handle different response formats
             const user = response.user || response;
             this.currentUser = user;
+            
+            // Store user data in localStorage for persistence
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            
             this.updateUI();
             return { success: true, user };
         } catch (error) {
@@ -48,6 +68,7 @@ class AuthService {
             console.error('Logout error:', error);
         }
         this.currentUser = null;
+        localStorage.removeItem('currentUser');
         this.updateUI();
         // Force redirect to home page
         window.location.replace('index.html');

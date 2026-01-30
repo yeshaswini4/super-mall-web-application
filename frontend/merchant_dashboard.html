@@ -8,29 +8,17 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background: #f8fafc;
+            color: #2d3748;
+            line-height: 1.6;
             min-height: 100vh;
-            overflow-x: hidden;
         }
-        
-        .bg-animation {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-                        radial-gradient(circle at 40% 80%, rgba(120, 219, 255, 0.3) 0%, transparent 50%);
-            animation: float 20s ease-in-out infinite;
-        }
-        
-        @keyframes float { 0%, 100% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-20px) rotate(1deg); } }
         
         .sidebar {
             position: fixed;
@@ -38,38 +26,38 @@
             top: 20px;
             width: 280px;
             height: calc(100vh - 40px);
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(30px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 25px;
+            background: white;
+            border-radius: 20px;
             padding: 30px 0;
             z-index: 1000;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            border: 1px solid #f1f5f9;
+            transform: perspective(1000px) rotateY(-2deg);
+            transition: all 0.3s ease;
         }
         
         .sidebar:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+            transform: perspective(1000px) rotateY(0deg) translateZ(10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.12);
         }
         
         .sidebar-header {
             padding: 0 30px 30px;
             text-align: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid #f1f5f9;
         }
         
         .logo {
             font-size: 24px;
             font-weight: 800;
-            background: linear-gradient(135deg, #ffffff 0%, #f093fb 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
         
         .logo-subtitle {
-            color: rgba(255, 255, 255, 0.7);
+            color: #64748b;
             font-size: 14px;
             font-weight: 500;
         }
@@ -82,35 +70,19 @@
             display: flex;
             align-items: center;
             padding: 15px 30px;
-            color: rgba(255, 255, 255, 0.8);
+            color: #64748b;
             text-decoration: none;
             transition: all 0.3s;
             position: relative;
             margin: 5px 20px;
-            border-radius: 15px;
+            border-radius: 12px;
         }
         
         .nav-item:hover, .nav-item.active {
-            background: rgba(255, 255, 255, 0.1);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            transform: translateX(5px);
-        }
-        
-        .nav-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 4px;
-            height: 0;
-            background: linear-gradient(135deg, #667eea, #f093fb);
-            border-radius: 2px;
-            transition: height 0.3s;
-        }
-        
-        .nav-item:hover::before, .nav-item.active::before {
-            height: 30px;
+            transform: translateX(5px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
         }
         
         .nav-icon {
@@ -130,12 +102,17 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 40px;
+            background: white;
+            padding: 25px 30px;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            border: 1px solid #f1f5f9;
         }
         
         .page-title {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             font-weight: 800;
-            background: linear-gradient(135deg, #ffffff 0%, #f093fb 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -144,34 +121,18 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            padding: 15px 30px;
-            border-radius: 50px;
+            padding: 15px 25px;
+            border-radius: 15px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            transform: perspective(500px) rotateX(5deg);
         }
         
         .add-product-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
-        }
-        
-        .add-product-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-        
-        .add-product-btn:hover::before {
-            left: 100%;
+            transform: perspective(500px) rotateX(0deg) translateY(-3px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
         }
         
         .stats-grid {
@@ -182,15 +143,16 @@
         }
         
         .stat-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(30px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: white;
             border-radius: 20px;
             padding: 30px;
             position: relative;
             overflow: hidden;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            border: 1px solid #f1f5f9;
+            transform: perspective(1000px) rotateX(5deg);
         }
         
         .stat-card::before {
@@ -200,14 +162,14 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            background: linear-gradient(135deg, rgba(102,126,234,0.05) 0%, rgba(118,75,162,0.05) 100%);
             opacity: 0;
             transition: opacity 0.3s;
         }
         
         .stat-card:hover {
-            transform: translateY(-10px) rotateX(5deg);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            transform: perspective(1000px) rotateX(0deg) translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
         }
         
         .stat-card:hover::before {
@@ -216,17 +178,14 @@
         
         .stat-card.approved {
             border-left: 4px solid #10b981;
-            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
         }
         
         .stat-card.pending {
             border-left: 4px solid #f59e0b;
-            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.2);
         }
         
         .stat-card.rejected {
             border-left: 4px solid #ef4444;
-            box-shadow: 0 10px 30px rgba(239, 68, 68, 0.2);
         }
         
         .stat-icon {
@@ -237,27 +196,16 @@
         }
         
         .stat-number {
-            font-size: 2.8rem;
+            font-size: 2.5rem;
             font-weight: 800;
-            color: white;
+            color: #1e293b;
             margin-bottom: 10px;
-            counter-reset: num var(--num);
-        }
-        
-        .stat-number::after {
-            content: counter(num);
-            animation: counter 2s ease-out;
-        }
-        
-        @keyframes counter {
-            from { --num: 0; }
-            to { --num: var(--target); }
         }
         
         .stat-label {
-            color: rgba(255, 255, 255, 0.8);
-            font-weight: 500;
-            font-size: 1.1rem;
+            color: #64748b;
+            font-weight: 600;
+            font-size: 1rem;
         }
         
         .content-grid {
@@ -268,23 +216,24 @@
         }
         
         .content-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(30px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: white;
             border-radius: 20px;
             padding: 30px;
             transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            border: 1px solid #f1f5f9;
+            transform: perspective(1000px) rotateY(2deg);
         }
         
         .content-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            transform: perspective(1000px) rotateY(0deg) translateZ(10px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
         }
         
         .card-title {
             font-size: 1.5rem;
             font-weight: 700;
-            color: white;
+            color: #1e293b;
             margin-bottom: 25px;
             display: flex;
             align-items: center;
@@ -294,47 +243,87 @@
         .activity-item {
             display: flex;
             align-items: center;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
+            padding: 18px;
+            background: #f8fafc;
+            border-radius: 15px;
             margin-bottom: 15px;
             transition: all 0.3s;
+            border: 1px solid #f1f5f9;
         }
         
         .activity-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateX(5px);
+            background: #f1f5f9;
+            transform: translateX(5px) scale(1.02);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
         }
         
         .activity-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-right: 15px;
-            font-size: 16px;
+            font-size: 18px;
         }
         
-        .activity-icon.approved { background: rgba(16, 185, 129, 0.2); color: #10b981; }
-        .activity-icon.pending { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
-        .activity-icon.rejected { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+        .activity-icon.approved { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+        .activity-icon.pending { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+        .activity-icon.rejected { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
         
         .activity-content h4 {
-            color: white;
+            color: #1e293b;
             font-weight: 600;
             margin-bottom: 5px;
         }
         
         .activity-content p {
-            color: rgba(255, 255, 255, 0.7);
+            color: #64748b;
             font-size: 0.9rem;
         }
         
         .chart-container {
             height: 300px;
             position: relative;
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 20px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #64748b;
+            border: 2px solid #f1f5f9;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary:hover {
+            background: #f8fafc;
+            border-color: #667eea;
+            color: #667eea;
+            transform: translateY(-2px);
         }
         
         .modal {
@@ -347,43 +336,26 @@
             background: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(10px);
             z-index: 2000;
-            animation: fadeIn 0.3s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
         }
         
         .modal-content {
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%) scale(0.9);
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(30px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            background: white;
             border-radius: 25px;
             padding: 40px;
             width: 90%;
             max-width: 600px;
-            color: white;
-            animation: modalSlide 0.3s ease forwards;
-        }
-        
-        @keyframes modalSlide {
-            to { transform: translate(-50%, -50%) scale(1); }
-        }
-        
-        .modal-header {
-            text-align: center;
-            margin-bottom: 30px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
         }
         
         .modal-title {
             font-size: 2rem;
             font-weight: 700;
             margin-bottom: 10px;
+            color: #1e293b;
         }
         
         .form-grid {
@@ -404,31 +376,25 @@
         .form-label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 500;
-            color: rgba(255, 255, 255, 0.9);
+            font-weight: 600;
+            color: #374151;
         }
         
         .form-input, .form-select, .form-textarea {
             width: 100%;
             padding: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 2px solid #f1f5f9;
             border-radius: 12px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
+            background: white;
+            color: #374151;
             font-size: 1rem;
-            backdrop-filter: blur(10px);
             transition: all 0.3s;
         }
         
         .form-input:focus, .form-select:focus, .form-textarea:focus {
             outline: none;
             border-color: #667eea;
-            box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
-            background: rgba(255, 255, 255, 0.15);
-        }
-        
-        .form-input::placeholder, .form-textarea::placeholder {
-            color: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
         
         .form-textarea {
@@ -443,75 +409,21 @@
             margin-top: 30px;
         }
         
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 15px 30px;
-            border-radius: 25px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .btn-primary:hover, .btn-secondary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-        
         .close-btn {
             position: absolute;
             top: 20px;
             right: 25px;
             background: none;
             border: none;
-            color: rgba(255, 255, 255, 0.7);
+            color: #64748b;
             font-size: 24px;
             cursor: pointer;
             transition: all 0.3s;
         }
         
         .close-btn:hover {
-            color: white;
+            color: #1e293b;
             transform: scale(1.1);
-        }
-        
-        .tooltip {
-            position: relative;
-            cursor: pointer;
-        }
-        
-        .tooltip::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            white-space: nowrap;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-            z-index: 1000;
-        }
-        
-        .tooltip:hover::after {
-            opacity: 1;
         }
         
         @media (max-width: 1024px) {
@@ -543,33 +455,12 @@
             }
             
             .page-title {
-                font-size: 2rem;
-            }
-        }
-        
-        .confetti {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            background: #f093fb;
-            animation: confetti-fall 3s linear infinite;
-        }
-        
-        @keyframes confetti-fall {
-            0% {
-                transform: translateY(-100vh) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100vh) rotate(720deg);
-                opacity: 0;
+                font-size: 1.8rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="bg-animation"></div>
-    
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="logo">🏪 SuperMall</div>
@@ -838,14 +729,6 @@
                         <label class="form-label">Category</label>
                         <select class="form-select" id="productCategory" required>
                             <option value="">Select Category</option>
-                            <option value="electronics">Electronics</option>
-                            <option value="fashion">Fashion</option>
-                            <option value="home">Home & Kitchen</option>
-                            <option value="beauty">Beauty & Personal Care</option>
-                            <option value="sports">Sports & Outdoors</option>
-                            <option value="books">Books</option>
-                            <option value="toys">Toys & Games</option>
-                            <option value="grocery">Grocery</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -888,6 +771,7 @@
             }
 
             initializeDashboard();
+            await loadCategories();
             loadMerchantData();
             initializeChart();
             loadInventoryData();
@@ -935,16 +819,127 @@
             }
         }
 
+        async function loadCategories() {
+            try {
+                const response = await apiService.get('/categories/');
+                const categorySelect = document.getElementById('productCategory');
+                
+                if (response.success && response.data) {
+                    categorySelect.innerHTML = '<option value="">Select Category</option>' +
+                        response.data.map(category => 
+                            `<option value="${category.name.toLowerCase()}">${category.name}</option>`
+                        ).join('');
+                } else {
+                    // Fallback categories
+                    categorySelect.innerHTML = `
+                        <option value="">Select Category</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="fashion">Fashion</option>
+                        <option value="home">Home & Kitchen</option>
+                        <option value="beauty">Beauty & Personal Care</option>
+                        <option value="sports">Sports & Outdoors</option>
+                        <option value="books">Books</option>
+                        <option value="toys">Toys & Games</option>
+                        <option value="grocery">Grocery</option>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading categories:', error);
+                // Use fallback categories
+                const categorySelect = document.getElementById('productCategory');
+                categorySelect.innerHTML = `
+                    <option value="">Select Category</option>
+                    <option value="electronics">Electronics</option>
+                    <option value="fashion">Fashion</option>
+                    <option value="home">Home & Kitchen</option>
+                    <option value="beauty">Beauty & Personal Care</option>
+                    <option value="sports">Sports & Outdoors</option>
+                    <option value="books">Books</option>
+                    <option value="toys">Toys & Games</option>
+                    <option value="grocery">Grocery</option>
+                `;
+            }
+        }
+
         async function loadMerchantData() {
             try {
-                const response = await apiService.get('/products/merchant/');
-                merchantProducts = response.data || [];
+                // Ensure merchant has a shop first
+                await ensureMerchantHasShop();
+                
+                const products = await apiService.getMerchantProducts();
+                merchantProducts = products || [];
                 updateDashboardStats();
-                animateCounters();
                 loadProductsGrid();
+                loadInventoryData();
+                loadActivityFeed();
+                
+                // Load revenue data
+                const stats = await apiService.getMerchantStats();
+                document.getElementById('todayOrders').textContent = stats?.orders_today || '0';
+                document.getElementById('todayRevenue').textContent = stats?.revenue_today || '0';
+                
             } catch (error) {
                 console.error('Error loading merchant data:', error);
+                // Show fallback data
+                merchantProducts = [];
+                updateDashboardStats();
+                loadProductsGrid();
+                loadInventoryData();
+                loadActivityFeed();
             }
+        }
+        
+        async function ensureMerchantHasShop() {
+            try {
+                // Check if merchant already has shops
+                const shops = await apiService.getMerchantShops();
+                if (shops && shops.length > 0) {
+                    return shops[0]; // Return first shop
+                }
+                
+                // Create a default shop for the merchant
+                const shopData = {
+                    name: `${currentUser.username}'s Shop`,
+                    description: `Welcome to ${currentUser.username}'s amazing shop! We offer quality products and excellent service.`,
+                    category: 1, // Fashion category (first category from populate_data.py)
+                    floor: 1, // Ground floor (first floor from populate_data.py)
+                    location: 'Ground Floor, Section B',
+                    image_url: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400',
+                    is_active: true
+                };
+                
+                const newShop = await apiService.createShop(shopData);
+                return newShop;
+                
+            } catch (error) {
+                console.error('Error ensuring merchant has shop:', error);
+                // Return a fallback shop object with a valid ID
+                return { id: 1, name: `${currentUser.username}'s Shop` };
+            }
+        }
+        
+        function loadActivityFeed() {
+            const activityFeed = document.getElementById('activityFeed');
+            if (!activityFeed) return;
+            
+            const recentProducts = merchantProducts.slice(0, 5);
+            activityFeed.innerHTML = recentProducts.map(product => {
+                const status = product.is_active ? 'approved' : 'pending';
+                const icon = product.is_active ? 'check' : 'clock';
+                const message = product.is_active ? 'has been approved' : 'is pending review';
+                
+                return `
+                    <div class="activity-item">
+                        <div class="activity-icon ${status}">
+                            <i class="fas fa-${icon}"></i>
+                        </div>
+                        <div class="activity-content">
+                            <h4>Product ${product.is_active ? 'Approved' : 'Submitted'}</h4>
+                            <p>${product.name} ${message}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('') || '<p style="text-align: center; color: #64748b; padding: 20px;">No recent activity</p>';
         }
 
         function updateDashboardStats() {
@@ -1024,24 +1019,28 @@
         document.getElementById('addProductForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const formData = {
-                name: document.getElementById('productName').value,
-                image: document.getElementById('productImageUrl').value,
-                price: parseFloat(document.getElementById('productPrice').value),
-                category: document.getElementById('productCategory').value,
-                description: document.getElementById('productDescription').value,
-                stock: parseInt(document.getElementById('productStock').value)
-            };
-            
             try {
-                await apiService.post('/products/create/', formData);
+                // First ensure merchant has a shop
+                let merchantShop = await ensureMerchantHasShop();
+                
+                const formData = {
+                    name: document.getElementById('productName').value,
+                    image_url: document.getElementById('productImageUrl').value,
+                    price: parseFloat(document.getElementById('productPrice').value),
+                    category: document.getElementById('productCategory').value,
+                    description: document.getElementById('productDescription').value,
+                    stock_quantity: parseInt(document.getElementById('productStock').value),
+                    shop: merchantShop.id,
+                    is_active: false // Ensure product is pending approval
+                };
+                
+                await apiService.createProduct(formData);
                 closeAddProductModal();
                 loadMerchantData();
-                showSuccessAnimation();
-                alert('Product submitted for approval successfully!');
+                alert('✨ Product submitted for approval successfully!');
             } catch (error) {
                 console.error('Error creating product:', error);
-                alert('Error creating product. Please try again.');
+                alert('⚠️ Error creating product: ' + (error.message || 'Please try again.'));
             }
         });
 
@@ -1111,10 +1110,10 @@
             
             grid.innerHTML = filteredProducts.map(product => `
                 <div class="stat-card ${getProductStatusClass(product)}">
-                    <img src="${product.image || 'https://via.placeholder.com/100'}" alt="${product.name}" style="width: 60px; height: 60px; border-radius: 8px; margin-bottom: 15px; object-fit: cover;">
-                    <div style="font-weight: 600; color: white; margin-bottom: 10px;">${product.name}</div>
+                    <img src="${product.image_url || product.image || 'https://via.placeholder.com/100'}" alt="${product.name}" style="width: 60px; height: 60px; border-radius: 8px; margin-bottom: 15px; object-fit: cover;">
+                    <div style="font-weight: 600; color: #1e293b; margin-bottom: 10px;">${product.name}</div>
                     <div style="font-size: 1.2rem; font-weight: 700; color: #667eea; margin-bottom: 10px;">₹${product.price}</div>
-                    <div style="color: rgba(255,255,255,0.7); margin-bottom: 15px;">Stock: ${product.stock || 0}</div>
+                    <div style="color: #64748b; margin-bottom: 15px;">Stock: ${product.stock_quantity || 0}</div>
                     <div style="display: flex; gap: 8px; justify-content: center;">
                         <button class="btn-secondary" style="padding: 8px 16px; font-size: 0.9rem;" onclick="editProduct(${product.id})">Edit</button>
                         <button class="btn-secondary" style="padding: 8px 16px; font-size: 0.9rem; color: #ef4444;" onclick="deleteProduct(${product.id})">Delete</button>
@@ -1151,9 +1150,9 @@
         }
         
         function loadInventoryData() {
-            const inStock = merchantProducts.filter(p => (p.stock || 0) > 10).length;
-            const lowStock = merchantProducts.filter(p => (p.stock || 0) > 0 && (p.stock || 0) <= 10).length;
-            const outOfStock = merchantProducts.filter(p => (p.stock || 0) === 0).length;
+            const inStock = merchantProducts.filter(p => (p.stock_quantity || 0) > 10).length;
+            const lowStock = merchantProducts.filter(p => (p.stock_quantity || 0) > 0 && (p.stock_quantity || 0) <= 10).length;
+            const outOfStock = merchantProducts.filter(p => (p.stock_quantity || 0) === 0).length;
             
             document.getElementById('inStockCount').textContent = inStock;
             document.getElementById('lowStockCount').textContent = lowStock;
@@ -1163,12 +1162,12 @@
             if (inventoryList) {
                 inventoryList.innerHTML = merchantProducts.map(product => `
                     <div class="activity-item">
-                        <div class="activity-icon ${(product.stock || 0) > 10 ? 'approved' : (product.stock || 0) > 0 ? 'pending' : 'rejected'}">
-                            <i class="fas fa-${(product.stock || 0) > 10 ? 'check' : (product.stock || 0) > 0 ? 'exclamation' : 'times'}"></i>
+                        <div class="activity-icon ${(product.stock_quantity || 0) > 10 ? 'approved' : (product.stock_quantity || 0) > 0 ? 'pending' : 'rejected'}">
+                            <i class="fas fa-${(product.stock_quantity || 0) > 10 ? 'check' : (product.stock_quantity || 0) > 0 ? 'exclamation' : 'times'}"></i>
                         </div>
                         <div class="activity-content">
                             <h4>${product.name}</h4>
-                            <p>Stock: ${product.stock || 0} units - ${(product.stock || 0) > 10 ? 'In Stock' : (product.stock || 0) > 0 ? 'Low Stock' : 'Out of Stock'}</p>
+                            <p>Stock: ${product.stock_quantity || 0} units - ${(product.stock_quantity || 0) > 10 ? 'In Stock' : (product.stock_quantity || 0) > 0 ? 'Low Stock' : 'Out of Stock'}</p>
                         </div>
                     </div>
                 `).join('');
@@ -1176,33 +1175,44 @@
         }
         
         function loadOrdersData() {
-            const sampleOrders = [
-                { id: 'ORD001', customer: 'John Doe', amount: 2499, status: 'delivered', date: '2024-01-15' },
-                { id: 'ORD002', customer: 'Jane Smith', amount: 1299, status: 'shipping', date: '2024-01-14' },
-                { id: 'ORD003', customer: 'Mike Johnson', amount: 3999, status: 'pending', date: '2024-01-13' }
-            ];
-            
-            const ordersList = document.getElementById('ordersList');
-            if (ordersList) {
-                ordersList.innerHTML = sampleOrders.map(order => `
-                    <div class="activity-item">
-                        <div class="activity-icon ${order.status === 'delivered' ? 'approved' : order.status === 'shipping' ? 'pending' : 'rejected'}">
-                            <i class="fas fa-${order.status === 'delivered' ? 'check' : order.status === 'shipping' ? 'truck' : 'clock'}"></i>
+            apiService.getOrders().then(orders => {
+                const merchantOrders = orders.filter(order => order.merchant_id === currentUser?.id);
+                const ordersList = document.getElementById('ordersList');
+                if (ordersList) {
+                    ordersList.innerHTML = merchantOrders.map(order => `
+                        <div class="activity-item">
+                            <div class="activity-icon ${order.status === 'delivered' ? 'approved' : order.status === 'shipped' ? 'pending' : 'rejected'}">
+                                <i class="fas fa-${order.status === 'delivered' ? 'check' : order.status === 'shipped' ? 'truck' : 'clock'}"></i>
+                            </div>
+                            <div class="activity-content">
+                                <h4>Order #${order.id}</h4>
+                                <p>${order.user_email || 'Customer'} - ₹${order.total_amount} - ${order.status}</p>
+                            </div>
                         </div>
-                        <div class="activity-content">
-                            <h4>Order ${order.id}</h4>
-                            <p>${order.customer} - ₹${order.amount} - ${order.status.charAt(0).toUpperCase() + order.status.slice(1)}</p>
-                        </div>
-                    </div>
-                `).join('');
-            }
+                    `).join('') || '<p style="text-align: center; color: #64748b; padding: 20px;">No orders found</p>';
+                }
+            }).catch(error => {
+                console.error('Error loading orders:', error);
+                const ordersList = document.getElementById('ordersList');
+                if (ordersList) {
+                    ordersList.innerHTML = '<p style="text-align: center; color: #ef4444; padding: 20px;">Error loading orders</p>';
+                }
+            });
         }
         
-        function loadShopSettings() {
+        async function loadShopSettings() {
             if (currentUser) {
-                document.getElementById('shopName').value = `${currentUser.username}'s Shop`;
-                document.getElementById('shopEmail').value = currentUser.email || '';
-                document.getElementById('shopDescription').value = 'Welcome to our amazing shop!';
+                try {
+                    const shop = await ensureMerchantHasShop();
+                    document.getElementById('shopName').value = shop.name || `${currentUser.username}'s Shop`;
+                    document.getElementById('shopEmail').value = shop.contact_email || currentUser.email || '';
+                    document.getElementById('shopDescription').value = shop.description || 'Welcome to our amazing shop!';
+                } catch (error) {
+                    console.error('Error loading shop settings:', error);
+                    document.getElementById('shopName').value = `${currentUser.username}'s Shop`;
+                    document.getElementById('shopEmail').value = currentUser.email || '';
+                    document.getElementById('shopDescription').value = 'Welcome to our amazing shop!';
+                }
             }
         }
         

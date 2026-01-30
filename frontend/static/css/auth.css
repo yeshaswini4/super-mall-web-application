@@ -5,7 +5,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
     padding: 40px 20px;
 }
 
@@ -62,8 +62,8 @@
 .input-group input:focus,
 .input-group select:focus {
     outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(65,153,225,0.1);
 }
 
 .input-group input::placeholder {
@@ -86,12 +86,12 @@
 }
 
 .auth-switch a {
-    color: #667eea;
+    color: #4299e1;
     font-weight: 600;
     text-decoration: none;
     transition: color 0.3s;
 }
 
 .auth-switch a:hover {
-    color: #5568d3;
+    color: #3182ce;
 }

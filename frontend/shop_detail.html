@@ -27,44 +27,17 @@
 
     <main class="container">
         
-<div class="shop-header">
-    <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=600" class="shop-banner">
-    <h2>Fresh Mart Grocery</h2>
-    <p>Fresh organic products delivered daily</p>
+<div class="shop-header" id="shopHeader">
+    <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=600" class="shop-banner" id="shopBanner">
+    <h2 id="shopName">Loading...</h2>
+    <p id="shopDescription">Loading shop details...</p>
 </div>
 
 <div style="padding: 60px 5%;">
     <h3 style="font-size: 2rem; margin-bottom: 30px; color: #1a202c;">🛒 Available Products</h3>
-    <div class="product-grid">
-        <div class="product-card">
-            <img src="https://images.unsplash.com/photo-1610832958506-aa56368176cf?w=300" alt="Vegetables">
-            <h4>Fresh Vegetables</h4>
-            <p>₹150/kg</p>
-        </div>
-        <div class="product-card">
-            <img src="https://images.unsplash.com/photo-1619566636858-adf3ef46400b?w=300" alt="Fruits">
-            <h4>Organic Fruits</h4>
-            <p>₹200/kg</p>
-        </div>
-        <div class="product-card">
-            <img src="https://images.unsplash.com/photo-1563636619-e9143da7973b?w=300" alt="Dairy">
-            <h4>Dairy Products</h4>
-            <p>₹80/item</p>
-        </div>
-        <div class="product-card">
-            <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=300" alt="Bread">
-            <h4>Fresh Bakery</h4>
-            <p>₹50/item</p>
-        </div>
-        <div class="product-card">
-            <img src="https://images.unsplash.com/photo-1574856344991-aaa31b6f4ce3?w=300" alt="Rice">
-            <h4>Rice & Grains</h4>
-            <p>₹60/kg</p>
-        </div>
-        <div class="product-card">
-            <img src="https://images.unsplash.com/photo-1599909533730-f9d7e5d4e6c5?w=300" alt="Spices">
-            <h4>Spices</h4>
-            <p>₹120/pack</p>
+    <div class="product-grid" id="productGrid">
+        <div style="text-align: center; padding: 40px; color: #718096;">
+            <p>Loading products...</p>
         </div>
     </div>
 </div>
@@ -77,6 +50,130 @@
             <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">Discover • Compare • Shop</p>
         </div>
     </footer>
+
+    <script src="static/js/config.js"></script>
+    <script src="static/js/api.js"></script>
+    <script src="static/js/enhanced-cart.js"></script>
+    <script>
+        let currentShopId = null;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Get shop ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            currentShopId = urlParams.get('id');
+            
+            if (!currentShopId) {
+                // Try to extract from filename (shop_1.html -> id=1)
+                const filename = window.location.pathname.split('/').pop();
+                const match = filename.match(/shop_(\d+)\.html/);
+                if (match) {
+                    currentShopId = match[1];
+                }
+            }
+
+            if (currentShopId) {
+                await loadShopDetails();
+                await loadShopProducts();
+            } else {
+                document.getElementById('shopName').textContent = 'Shop Not Found';
+                document.getElementById('shopDescription').textContent = 'Invalid shop ID';
+                document.getElementById('productGrid').innerHTML = '<p style="text-align: center; color: #718096;">Shop not found</p>';
+            }
+        });
+
+        async function loadShopDetails() {
+            try {
+                const response = await apiService.get(`/shops/${currentShopId}/`);
+                if (response.success && response.data) {
+                    const shop = response.data;
+                    document.getElementById('shopName').textContent = shop.name;
+                    document.getElementById('shopDescription').textContent = shop.description || 'Welcome to our shop!';
+                    
+                    if (shop.image_url) {
+                        document.getElementById('shopBanner').src = shop.image_url;
+                    }
+                    
+                    document.title = `${shop.name} - SuperMall`;
+                } else {
+                    throw new Error('Shop not found');
+                }
+            } catch (error) {
+                console.error('Error loading shop details:', error);
+                document.getElementById('shopName').textContent = 'Shop Not Found';
+                document.getElementById('shopDescription').textContent = 'Unable to load shop details';
+            }
+        }
+
+        async function loadShopProducts() {
+            try {
+                const response = await apiService.get(`/products/shop/${currentShopId}/`);
+                const productGrid = document.getElementById('productGrid');
+                
+                if (response.success && response.data && response.data.length > 0) {
+                    productGrid.innerHTML = response.data.map(product => `
+                        <div class="product-card">
+                            <img src="${product.image_url || 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300'}" alt="${product.name}">
+                            <h4>${product.name}</h4>
+                            <p>₹${parseFloat(product.price).toLocaleString()}</p>
+                            <div class="product-actions">
+                                <button onclick="addToCart(${product.id}, '${product.name}', ${product.price})" class="btn-cart">🛒 Add to Cart</button>
+                                <button onclick="addToWishlist(${product.id}, '${product.name}', ${product.price})" class="btn-wishlist">❤️</button>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    productGrid.innerHTML = `
+                        <div style="text-align: center; padding: 40px; color: #718096;">
+                            <h4>No Products Available</h4>
+                            <p>This shop doesn't have any products yet. Check back later!</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading products:', error);
+                document.getElementById('productGrid').innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #e53e3e;">
+                        <h4>Error Loading Products</h4>
+                        <p>Unable to load products. Please try again later.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function addToCart(productId, productName, price) {
+            if (typeof enhancedCartManager !== 'undefined') {
+                enhancedCartManager.addToCart({
+                    id: productId,
+                    name: productName,
+                    price: price,
+                    image: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300',
+                    quantity: 1
+                });
+                alert(`${productName} added to cart!`);
+            } else {
+                alert('Cart functionality not available');
+            }
+        }
+
+        function addToWishlist(productId, productName, price) {
+            // Simple wishlist implementation
+            let wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+            const existingItem = wishlist.find(item => item.id === productId);
+            
+            if (!existingItem) {
+                wishlist.push({
+                    id: productId,
+                    name: productName,
+                    price: price,
+                    image: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300'
+                });
+                localStorage.setItem('wishlist', JSON.stringify(wishlist));
+                alert(`${productName} added to wishlist!`);
+            } else {
+                alert(`${productName} is already in your wishlist!`);
+            }
+        }
+    </script>
 
 </body>
 

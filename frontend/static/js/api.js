@@ -51,20 +51,26 @@ class ApiService {
             if (!response.ok) {
                 const errorText = await response.text();
                 console.error('API Error:', response.status, errorText);
-                throw new Error(`HTTP error! status: ${response.status}`);
+                return { success: false, error: `HTTP error! status: ${response.status}` };
             }
-            return await response.json();
+            const data = await response.json();
+            return Array.isArray(data) ? data : (data.success !== undefined ? data : { success: true, data });
         } catch (error) {
             console.error('API request failed:', error);
-            throw error;
+            return { success: false, error: error.message };
         }
     }
 
     // Auth endpoints
-    async login(email, password) {
+    async login(emailOrUsername, password) {
+        // Try with email first, then username
+        const loginData = emailOrUsername.includes('@') 
+            ? { email: emailOrUsername, password }
+            : { username: emailOrUsername, password };
+            
         return this.request('/auth/login/', {
             method: 'POST',
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify(loginData)
         });
     }
 
@@ -238,6 +244,28 @@ class ApiService {
 
     async getCustomerStats() {
         return this.request('/auth/customer-stats/');
+    }
+
+    // User management endpoints
+    async getAllUsers() {
+        return this.request('/auth/users/');
+    }
+
+    async getUsersByRole(role) {
+        return this.request(`/auth/users/?role=${role}`);
+    }
+
+    async updateUser(userId, userData) {
+        return this.request(`/auth/users/${userId}/`, {
+            method: 'PUT',
+            body: JSON.stringify(userData)
+        });
+    }
+
+    async deleteUser(userId) {
+        return this.request(`/auth/users/${userId}/`, {
+            method: 'DELETE'
+        });
     }
 
     // Merchant-specific endpoints
