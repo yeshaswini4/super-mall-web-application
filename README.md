@@ -1,43 +1,89 @@
-# SuperMall - E-commerce Web Application
+🛒 Super Mall Web Application
 
-## Project Structure
-```
+A full-stack **Super Mall Web Application** built using **Django (Backend)** and **HTML, CSS, JavaScript (Frontend)**.  
+The application supports multiple user roles such as **Admin, Merchant, and Customer**, with core e-commerce features.
+
+---
+
+## 🚀 Features
+
+### 👤 User Management
+- User Registration & Login
+- Role-based access (Admin / Merchant / Customer)
+- Authentication & Authorization
+
+### 🏪 Merchant Module
+- Add & manage products
+- View product listings
+- Handle orders
+
+### 🛍️ Customer Module
+- Browse products
+- View product details
+- Place orders
+- View order history
+
+### 🛠️ Admin Module
+- Admin dashboard
+- Manage users & products
+- Monitor overall system activity
+
+---
+
+## 🧑‍💻 Tech Stack
+
+### Backend
+- **Python**
+- **Django**
+- **SQLite (Development DB)**
+
+### Frontend
+- **HTML**
+- **CSS**
+- **JavaScript**
+
+---
+
+## 📁 Project Structure
+
 supermall/
-├── frontend/           # HTML, CSS, JavaScript files
-│   ├── index.html     # Homepage
-│   ├── login.html     # Login page
-│   ├── signup.html    # Registration page
-│   ├── shop_*.html    # Individual shop pages
-│   └── static/        # CSS, JS, images
-└── backend/           # Django backend with SQLite
-    ├── manage.py      # Django management
-    ├── run_fixed.bat  # Setup and run script
-    └── apps/          # Django applications
-```
+│
+├── backend/
+│ ├── accounts/
+│ ├── products/
+│ ├── db.sqlite3
+│ └── manage.py
+│
+├── frontend/
+│ ├── static/
+│ │ ├── css/
+│ │ └── js/
+│ ├── login.html
+│ ├── signup.html
+│ ├── admin_dashboard.html
+│ ├── merchant_dashboard.html
+│ └── customer_dashboard.html
+│
+├── .gitignore
+└── README.md
 
-## Quick Start
 
-1. **Start Backend Server:**
-   ```bash
-   cd backend
-   run_fixed.bat
-   ```
+---
 
-2. **Access Application:**
-   - Frontend: http://127.0.0.1:8000/
-   - Admin Panel: http://127.0.0.1:8000/admin/
+## ⚙️ Setup Instructions
 
-## Features
-- ✅ Complete frontend with 15+ shop pages
-- ✅ Django REST API backend
-- ✅ SQLite database with sample data
-- ✅ User authentication (Admin/Merchant/Customer)
-- ✅ Cart and wishlist functionality
-- ✅ Product comparison and offers
-
-## Login Credentials
-See `backend/CREDENTIALS.md` for all login details.
-
-## Documentation
-- Setup Guide: `backend/README_SETUP.md`
-- All backend files contained in `backend/` directory
+### 1️⃣ Clone the repository
+```bash
+git clone https://github.com/yeshaswini4/super-mall-web-application.git
+cd super-mall-web-application
+2️⃣ Create virtual environment
+python -m venv venv
+venv\Scripts\activate   # Windows
+3️⃣ Install dependencies
+pip install django
+4️⃣ Run migrations
+python manage.py migrate
+5️⃣ Start the server
+python manage.py runserver
+6️⃣ Open in browser
+http://127.0.0.1:8000/
